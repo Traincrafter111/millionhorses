@@ -1,0 +1,21 @@
+{
+  "minecraft:husbandry/tame_an_animal": {
+    "criteria": {
+      "tamed_animal": "2026-02-23 15:49:49 -0600"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-02-23 15:49:06 -0600"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:dark_forest": "2026-02-23 15:49:07 -0600"
+    },
+    "done": false
+  },
+  "DataVersion": 3465
+}

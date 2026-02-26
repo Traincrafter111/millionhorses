@@ -1,0 +1,28 @@
+{
+  "minecraft:husbandry/tame_an_animal": {
+    "criteria": {
+      "tamed_animal": "2026-02-24 15:00:43 -0600"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-02-24 15:00:28 -0600"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:dark_forest": "2026-02-24 15:00:30 -0600",
+      "minecraft:old_growth_birch_forest": "2026-02-24 15:01:16 -0600"
+    },
+    "done": false
+  },
+  "minecraft:recipes/misc/mojang_banner_pattern": {
+    "criteria": {
+      "has_enchanted_golden_apple": "2026-02-24 15:00:40 -0600"
+    },
+    "done": true
+  },
+  "DataVersion": 3465
+}

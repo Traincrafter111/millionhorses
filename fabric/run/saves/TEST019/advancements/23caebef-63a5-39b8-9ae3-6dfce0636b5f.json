@@ -1,0 +1,22 @@
+{
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-02-23 17:17:49 -0600"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:river": "2026-02-23 17:18:05 -0600",
+      "minecraft:old_growth_birch_forest": "2026-02-23 17:17:50 -0600"
+    },
+    "done": false
+  },
+  "minecraft:recipes/misc/mojang_banner_pattern": {
+    "criteria": {
+      "has_enchanted_golden_apple": "2026-02-23 17:17:49 -0600"
+    },
+    "done": true
+  },
+  "DataVersion": 3465
+}
