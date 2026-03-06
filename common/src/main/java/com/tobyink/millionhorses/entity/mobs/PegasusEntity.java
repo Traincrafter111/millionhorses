@@ -49,27 +49,51 @@ public class PegasusEntity extends AbstractChestedHorse {
             SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> PEGASUS_FLYING =
             SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.BOOLEAN);
+    // Carpet sincronizada via EntityData para que el cliente la vea sin GUI abierto
+    private static final EntityDataAccessor<net.minecraft.nbt.CompoundTag> CARPET_ITEM_DATA =
+            SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.COMPOUND_TAG);
 
     private boolean variantSetByNbt = false;
-    private boolean babyBornPlayed = false;
-    private boolean wasBaby = false;
+    private boolean babyBornPlayed  = false;
+    private boolean wasBaby         = false;
 
     // --- Animation State ---
     public HorseAnimations dispatcher;
     public final MoveAnalysis moveAnalysis;
     public PegasusIdleController idleController;
 
-    private enum BaseAnim { IDLE, WALK, RUN, FLY, BABY }
+    private enum BaseAnim { IDLE, WALK, RUN, FLY }
     private BaseAnim baseAnim = null;
     private boolean isRearing = false;
 
+    // --- Taming Animation State ---
+    private enum TamingState { NONE, BUCKING, REARING }
+    private TamingState tamingState        = TamingState.NONE;
+    private int         tamingTimer        = 0;
+    // BUCK_DURATION varía según temperamento (igual que vanilla):
+    // temperamento alto → buck corto, temperamento bajo → buck largo
+    private int getBuckDuration() {
+        int temper = this.getTemper();
+        int maxTemper = this.getMaxTemper();
+        // Rango: 140 ticks (7s) cuando temper=0, hasta 60 ticks (3s) cuando temper=maxTemper
+        float ratio = (float) temper / maxTemper;
+        return (int)(140 - ratio * 80) + this.random.nextInt(40);
+    }
+    private static final int REAR_DURATION_TAMING = 60; // ticks de rear tras tirar al jinete (3s)
+
     // --- Flight State ---
-    private boolean riderJumpTriggered = false;
-    private int jumpBoostTicks = 0;
-    private static final int    JUMP_BOOST_DURATION = 20;
-    private static final double FLY_ASCEND_SPEED  = 0.15;
-    private static final double FLY_GLIDE_DESCENT = -0.02;
-    private static final double FLY_FORWARD_SPEED = 0.3;
+    // Doble salto: 0 = en suelo, 1 = primer salto, 2 = volando
+    private int    jumpCount       = 0;
+    private boolean wasOnGround    = true;
+    private boolean jumpKeyHeld    = false; // detectado via player.jumping en tick
+    private double  prevY          = 0.0;   // para detectar caída en servidor
+
+    // Valores ajustables
+    public static double FLY_ASCEND_SPEED      = 0.12;
+    public static double FLY_DESCEND_SPEED     = -0.06;
+    public static double FLY_FORWARD_SPEED     = 0.55;
+    public static double GROUND_SPEED_BOOST    = 1.6;
+    public static int    CLIFF_MIN_BLOCKS      = 5;
 
     // --- Constructor ---
     public PegasusEntity(EntityType<? extends AbstractChestedHorse> entityType, Level level) {
@@ -85,6 +109,7 @@ public class PegasusEntity extends AbstractChestedHorse {
         super.defineSynchedData();
         this.entityData.define(PEGASUS_VARIANT, 0);
         this.entityData.define(PEGASUS_FLYING, false);
+        this.entityData.define(CARPET_ITEM_DATA, new net.minecraft.nbt.CompoundTag());
     }
 
     // --- Variant ---
@@ -107,12 +132,16 @@ public class PegasusEntity extends AbstractChestedHorse {
     public void createInventory() {
         SimpleContainer oldInventory = this.inventory;
         boolean chest = this.entityData != null && this.hasChest();
-        int size = 2 + (chest ? 15 : 0);
+        int size = 3 + (chest ? 15 : 0);
         this.inventory = new SimpleContainer(size) {
             @Override
             public void setChanged() {
                 super.setChanged();
                 PegasusEntity.this.containerChanged(PegasusEntity.this.inventory);
+            }
+            @Override
+            public void stopOpen(net.minecraft.world.entity.player.Player player) {
+                // No limpiar el inventario al cerrar la GUI
             }
         };
         if (oldInventory != null) {
@@ -132,6 +161,9 @@ public class PegasusEntity extends AbstractChestedHorse {
         if (!this.inventory.getItem(1).isEmpty()) {
             tag.put("ArmorItem", this.inventory.getItem(1).save(new CompoundTag()));
         }
+        if (!this.inventory.getItem(2).isEmpty()) {
+            tag.put("CarpetItem", this.inventory.getItem(2).save(new CompoundTag()));
+        }
     }
 
     @Override
@@ -143,6 +175,14 @@ public class PegasusEntity extends AbstractChestedHorse {
                 ItemStack armorStack = ItemStack.of(tag.getCompound("ArmorItem"));
                 if (!armorStack.isEmpty() && this.isArmor(armorStack)) {
                     this.inventory.setItem(1, armorStack);
+                }
+            }
+            if (tag.contains("CarpetItem", 10)) {
+                ItemStack carpetStack = ItemStack.of(tag.getCompound("CarpetItem"));
+                if (!carpetStack.isEmpty()) {
+                    this.inventory.setItem(2, carpetStack);
+                    // Sincronizar al cliente
+                    this.entityData.set(CARPET_ITEM_DATA, carpetStack.save(new net.minecraft.nbt.CompoundTag()));
                 }
             }
             this.variantSetByNbt = true;
@@ -159,7 +199,13 @@ public class PegasusEntity extends AbstractChestedHorse {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty,
                                         MobSpawnType spawnType, @Nullable SpawnGroupData spawnData,
                                         @Nullable CompoundTag tag) {
-        return super.finalizeSpawn(level, difficulty, spawnType, spawnData, tag);
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, tag);
+        // Asignar variante aleatoria si no viene del NBT (spawn egg, natural spawn, etc.)
+        if (!variantSetByNbt) {
+            this.setPegasusVariant(PegasusVariant.byId(this.random.nextInt(PegasusVariant.values().length)));
+            variantSetByNbt = true;
+        }
+        return data;
     }
 
     // --- Breeding ---
@@ -205,43 +251,31 @@ public class PegasusEntity extends AbstractChestedHorse {
                 (EntityType<? extends AbstractChestedHorse>) this.getType();
         PegasusEntity foal = new PegasusEntity(type, level);
 
-        // Heredar textura base de un padre y ojos del otro (independientemente)
         boolean thisHasBlue  = this.getPegasusVariant().name().endsWith("_BLUE");
         boolean otherHasBlue = other.getPegasusVariant().name().endsWith("_BLUE");
 
-        // Base: elegir textura de uno de los padres al azar (sin importar ojos)
         PegasusVariant parentBase = this.random.nextBoolean()
                 ? this.getPegasusVariant()
                 : other.getPegasusVariant();
 
-        // Ojos: elegir de uno de los padres al azar (independiente de la base)
         boolean foalHasBlue = this.random.nextBoolean() ? thisHasBlue : otherHasBlue;
-
-        // Obtener nombre base sin _BLUE
         String baseName = parentBase.name().replace("_BLUE", "");
-
-        // Combinar base + ojos
         String foalVariantName = foalHasBlue ? baseName + "_BLUE" : baseName;
         PegasusVariant foalVariant;
         try {
             foalVariant = PegasusVariant.valueOf(foalVariantName);
         } catch (IllegalArgumentException e) {
-            foalVariant = parentBase; // fallback
+            foalVariant = parentBase;
         }
 
         foal.setPegasusVariant(foalVariant);
         foal.variantSetByNbt = true;
-
         return foal;
     }
 
     // --- Armor ---
-    @Override
-    public boolean canWearArmor() { return true; }
-
-    @Override
-    public boolean isArmor(ItemStack stack) { return stack.getItem() instanceof HorseArmorItem; }
-
+    @Override public boolean canWearArmor() { return true; }
+    @Override public boolean isArmor(ItemStack stack) { return stack.getItem() instanceof HorseArmorItem; }
     public ItemStack getArmor() { return this.getItemBySlot(EquipmentSlot.CHEST); }
 
     private void setArmor(ItemStack stack) {
@@ -273,9 +307,22 @@ public class PegasusEntity extends AbstractChestedHorse {
         }
     }
 
-    /** Getter para el layer de armadura — lee del EquipmentSlot sincronizado con el cliente. */
-    public ItemStack getArmorItem() {
-        return this.getItemBySlot(EquipmentSlot.CHEST);
+    public ItemStack getArmorItem() { return this.getItemBySlot(EquipmentSlot.CHEST); }
+
+    public net.minecraft.world.SimpleContainer getHorseInventory() { return this.inventory; }
+
+    // --- Carpet (slot 2) ---
+    public ItemStack getCarpetItem() {
+        net.minecraft.nbt.CompoundTag tag = this.entityData.get(CARPET_ITEM_DATA);
+        if (tag.isEmpty()) return ItemStack.EMPTY;
+        return ItemStack.of(tag);
+    }
+    public void setCarpetItem(ItemStack stack) {
+        // Guardar en inventory para persistencia
+        if (this.inventory != null) this.inventory.setItem(2, stack);
+        // Sincronizar al cliente via entityData
+        this.entityData.set(CARPET_ITEM_DATA,
+                stack.isEmpty() ? new net.minecraft.nbt.CompoundTag() : stack.save(new net.minecraft.nbt.CompoundTag()));
     }
 
     // --- Attributes ---
@@ -339,12 +386,18 @@ public class PegasusEntity extends AbstractChestedHorse {
         if (standing) {
             isRearing = true;
             this.playSound(SoundEvents.HORSE_ANGRY, 1.0F, 1.0F);
-            dispatcher.buck();
+            if (!this.isTamed() && this.isVehicle()) {
+                dispatcher.buck();
+            } else {
+                dispatcher.rearEntry();
+                dispatcher.rear();
+            }
         } else {
             isRearing = false;
             dispatcher.idle();
         }
     }
+
 
     // --- Tick ---
     @Override
@@ -352,43 +405,108 @@ public class PegasusEntity extends AbstractChestedHorse {
         super.tick();
         moveAnalysis.update();
 
-        if (this.isVehicle() && this.isTamed()) {
+        boolean currentlyOnGround = this.onGround();
+
+        if (this.isVehicle() && !this.isTamed()) {
+            // Pegaso salvaje montado → iniciar buck si no está ya en animación de doma
+            if (!level().isClientSide && tamingState == TamingState.NONE) {
+                tamingState = TamingState.BUCKING;
+                tamingTimer = getBuckDuration();
+                dispatcher.buck();
+                this.playSound(SoundEvents.HORSE_ANGRY, 1.0F, 1.0F);
+            }
+        } else if (this.isVehicle() && this.isTamed()) {
             Entity rider = this.getPassengers().get(0);
             if (rider instanceof Player player) {
+                // Detectar jump key via player.jumping (evita problema del medidor)
+                jumpKeyHeld = ((com.tobyink.millionhorses.mixin.LivingEntityMixin)(Object) player).isJumping();
                 handleFlight(player);
             }
         } else {
-            if (this.isPegasusFlying() && this.onGround()) {
-                this.setPegasusFlying(false);
-                this.setNoGravity(false);
-                jumpBoostTicks = 0;
+            // Punto 6: al desmontarse en el aire, caer con gravedad normal
+            if (this.isPegasusFlying()) {
+                setPegasusFlying(false);
+                setNoGravity(false);
+                jumpKeyHeld = false;
+                jumpCount = 0;
+            }
+            if (currentlyOnGround && this.isNoGravity()) {
+                setNoGravity(false);
             }
         }
 
-        if (level().isClientSide) return;
-        if (isRearing) return;
+        // Resetear contador de saltos al tocar el suelo
+        if (currentlyOnGround && !wasOnGround) {
+            jumpCount = 0;
+        }
+        wasOnGround = currentlyOnGround;
 
-        // Animación de bebé
+        if (level().isClientSide) return;
+        // Solo bloquear el tick normal si está en rear IDLE (no durante doma)
+        if (isRearing && tamingState == TamingState.NONE) return;
+
+        // --- Taming animation cycle ---
+        if (tamingState != TamingState.NONE) {
+            tamingTimer--;
+            if (tamingState == TamingState.BUCKING) {
+                // Redispatch buck cada tick — igual que walk/run/idle
+                // para asegurar que el cliente siempre reciba la animación
+                dispatcher.buck();
+                if (tamingTimer <= 0) {
+                    this.ejectPassengers();
+                    tamingState = TamingState.REARING;
+                    tamingTimer = REAR_DURATION_TAMING;
+                    dispatcher.rearEntry();
+                    dispatcher.rear();
+                    this.playSound(SoundEvents.HORSE_ANGRY, 1.0F, 1.0F);
+                }
+            } else if (tamingState == TamingState.REARING) {
+                if (tamingTimer <= 0) {
+                    tamingState = TamingState.NONE;
+                    dispatcher.idle();
+                }
+            }
+        }
+
+        // Punto 5: detectar precipicio en servidor usando diferencia de posición Y
+        if (this.isVehicle() && this.isTamed() && !isPegasusFlying()) {
+            double deltaY = this.getY() - prevY;
+            if (!onGround() && deltaY < -0.1) {
+                boolean isCliff = true;
+                for (int i = 1; i <= CLIFF_MIN_BLOCKS; i++) {
+                    BlockPos below = blockPosition().below(i);
+                    if (!level().isEmptyBlock(below)) {
+                        isCliff = false;
+                        break;
+                    }
+                }
+                if (isCliff) activateFlight();
+            }
+        }
+        prevY = this.getY();
+
+        // Animación babyBorn al nacer (una sola vez) + pose baby en loop
         if (this.isBaby()) {
             wasBaby = true;
             if (!babyBornPlayed) {
                 dispatcher.babyBorn();
                 babyBornPlayed = true;
-                baseAnim = BaseAnim.BABY;
-                return;
             }
-            if (baseAnim != BaseAnim.BABY) {
-                dispatcher.baby();
-                baseAnim = BaseAnim.BABY;
-            }
-            return;
+            dispatcher.babyPose();
         }
 
         // Transición bebé → adulto
-        if (wasBaby) {
+        if (wasBaby && !this.isBaby()) {
             wasBaby = false;
-            baseAnim = null; // forzar re-evaluación de animación
+            baseAnim = null;
             dispatcher.idle();
+        }
+
+        // Durante la doma, no cambiar la animación base (buck/rear la manejan ellos)
+        if (tamingState != TamingState.NONE) {
+            // Solo actualizar prevY para detección de precipicio
+            prevY = this.getY();
+            return;
         }
 
         BaseAnim next;
@@ -420,7 +538,7 @@ public class PegasusEntity extends AbstractChestedHorse {
             if (next != BaseAnim.IDLE) idleController.onStartMoving();
             baseAnim = next;
             switch (baseAnim) {
-                case FLY  -> dispatcher.fly();
+                case FLY  -> { System.out.println("[Pegasus] dispatching fly anim"); dispatcher.fly(); }
                 case RUN  -> dispatcher.run();
                 case WALK -> dispatcher.walk();
                 case IDLE -> dispatcher.idle();
@@ -436,31 +554,37 @@ public class PegasusEntity extends AbstractChestedHorse {
     @Override
     public void handleStartJump(int jumpPower) {
         if (!isPegasusFlying()) {
-            dispatcher.jump();
-            setPegasusFlying(true);
-            setNoGravity(true);
-            setDeltaMovement(getDeltaMovement().x, FLY_ASCEND_SPEED * 2, getDeltaMovement().z);
-        } else {
-            setDeltaMovement(getDeltaMovement().x, FLY_ASCEND_SPEED, getDeltaMovement().z);
+            jumpCount++;
+            if (jumpCount == 1) {
+                // Primer salto: salto normal, solo animación
+                dispatcher.jump();
+            } else if (jumpCount >= 2) {
+                // Doble salto: entrar en modo vuelo
+                activateFlight();
+            }
         }
-        riderJumpTriggered = true;
+        // Si ya está volando, handleStartJump no hace nada — el vuelo se controla via player.jumping en tick
     }
 
     @Override
-    public void handleStopJump() { riderJumpTriggered = false; }
+    public void handleStopJump() {
+        // No usamos esto para el vuelo, usamos player.jumping en tick
+    }
+
+    private void activateFlight() {
+        setPegasusFlying(true);
+        setNoGravity(true);
+        baseAnim = null; // forzar re-evaluación en el tick
+        setDeltaMovement(getDeltaMovement().x, FLY_ASCEND_SPEED * 1.5, getDeltaMovement().z);
+    }
 
     private void handleFlight(Player player) {
         if (!isPegasusFlying()) return;
-        setNoGravity(true);
-        Vec3 movement = getDeltaMovement();
 
-        double newY;
-        if (riderJumpTriggered) {
-            newY = movement.y;
-            riderJumpTriggered = false;
-        } else {
-            newY = Math.max(movement.y - 0.01, FLY_GLIDE_DESCENT);
-        }
+        setNoGravity(true);
+
+        // Punto 3: subir si jump mantenido, bajar si no — via player.jumping
+        double newY = jumpKeyHeld ? FLY_ASCEND_SPEED : FLY_DESCEND_SPEED;
 
         float yRot = player.getYRot();
         double dx = -Math.sin(Math.toRadians(yRot)) * FLY_FORWARD_SPEED * player.zza;
@@ -470,9 +594,11 @@ public class PegasusEntity extends AbstractChestedHorse {
         setYRot(player.getYRot());
         this.yRotO = getYRot();
 
+        // Aterrizar
         if (onGround() && newY <= 0) {
             setPegasusFlying(false);
             setNoGravity(false);
+            jumpCount = 0;
         }
     }
 
@@ -482,15 +608,54 @@ public class PegasusEntity extends AbstractChestedHorse {
     }
 
     @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        return false;
+    }
+
+    @Override
+    public void travel(Vec3 travelVec) {
+        if (this.isVehicle() && this.isTamed() && !isPegasusFlying()) {
+            super.travel(new Vec3(travelVec.x * GROUND_SPEED_BOOST, travelVec.y, travelVec.z * GROUND_SPEED_BOOST));
+        } else {
+            super.travel(travelVec);
+        }
+    }
+
+    @Override
     public void aiStep() { super.aiStep(); }
 
     // --- Interacción ---
-    @Override
+    // Ticks de crecimiento que reduce cada comida (igual que vanilla AbstractHorse)
+    private int getBabyAgeUpAmount(ItemStack stack) {
+        if (stack.is(Items.SUGAR))                   return 30 * 20;
+        if (stack.is(Items.WHEAT))                   return 20 * 20;
+        if (stack.is(Items.APPLE))                   return 60 * 20;
+        if (stack.is(Items.GOLDEN_CARROT))           return 60 * 20;
+        if (stack.is(Items.GOLDEN_APPLE))            return 240 * 20;
+        if (stack.is(Items.ENCHANTED_GOLDEN_APPLE))  return 240 * 20;
+        if (stack.is(Items.HAY_BLOCK))               return 180 * 20;
+        return 0;
+    }
+
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (level().isClientSide) return InteractionResult.CONSUME;
 
+        // Bebé + comida → reducir tiempo de crecimiento
+        if (this.isBaby() && this.isFood(stack)) {
+            int amount = getBabyAgeUpAmount(stack);
+            if (amount > 0) {
+                if (!player.getAbilities().instabuild) stack.shrink(1);
+                this.ageUp(amount, true);
+                this.heal(2.0F);
+                this.playSound(SoundEvents.HORSE_EAT, 1.0F, 1.0F);
+                this.level().broadcastEntityEvent(this, (byte) 6);
+                return InteractionResult.SUCCESS;
+            }
+        }
+
         if (!this.isTamed()) {
+            // Comida en mano → aumentar temperamento
             if (this.isFood(stack) && this.getTemper() < this.getMaxTemper()) {
                 if (!player.getAbilities().instabuild) stack.shrink(1);
                 this.modifyTemper(getFoodTemper(stack));
@@ -499,7 +664,28 @@ public class PegasusEntity extends AbstractChestedHorse {
                 this.level().broadcastEntityEvent(this, (byte) 6);
                 return InteractionResult.SUCCESS;
             }
-            if (!this.isBaby()) player.startRiding(this);
+            // Solo montar con mano vacía
+            if (stack.isEmpty() && !this.isBaby()) {
+                player.startRiding(this);
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        // Tijeras: quitar cofre — cualquier jugador
+        if (stack.is(net.minecraft.world.item.Items.SHEARS) && this.hasChest()) {
+            for (int i = 3; i < this.getHorseInventory().getContainerSize(); i++) {
+                ItemStack chestItem = this.getHorseInventory().getItem(i);
+                if (!chestItem.isEmpty()) {
+                    this.spawnAtLocation(chestItem);
+                    this.getHorseInventory().setItem(i, ItemStack.EMPTY);
+                }
+            }
+            this.setChest(false);
+            this.spawnAtLocation(net.minecraft.world.level.block.Blocks.CHEST.asItem());
+            this.createInventory();
+            this.playSound(net.minecraft.sounds.SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
+            if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player,
+                    p -> p.broadcastBreakEvent(hand));
             return InteractionResult.SUCCESS;
         }
 
@@ -507,8 +693,7 @@ public class PegasusEntity extends AbstractChestedHorse {
                 || player.getUUID().equals(this.getOwnerUUID());
 
         if (isOwner) {
-            // Activar modo crianza
-            if (this.isBreedingItem(stack) && this.isTamed() && !this.isBaby()) {
+            if (this.isBreedingItem(stack) && !this.isBaby()) {
                 if (!player.getAbilities().instabuild) stack.shrink(1);
                 this.setInLove(player);
                 this.playSound(SoundEvents.HORSE_EAT, 1.0F, 1.0F);
@@ -520,15 +705,26 @@ public class PegasusEntity extends AbstractChestedHorse {
                 this.playSound(SoundEvents.HORSE_EAT, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS;
             }
-            if (stack.is(Blocks.CHEST.asItem()) && !this.hasChest()) {
+            // Equipar alfombra
+            if (com.tobyink.millionhorses.entity.client.renderer.layer.PegasusCarpetLayer.isCarpet(stack)
+                    && this.getCarpetItem().isEmpty()) {
+                ItemStack carpet = stack.copy();
+                carpet.setCount(1);
+                this.setCarpetItem(carpet);
                 if (!player.getAbilities().instabuild) stack.shrink(1);
-                this.setChest(true);
-                this.createInventory();
+                this.playSound(SoundEvents.LLAMA_SWAG, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS;
             }
-            if (stack.isEmpty() && this.hasChest() && player.isShiftKeyDown()) {
-                this.setChest(false);
-                this.spawnAtLocation(Blocks.CHEST.asItem());
+            // Quitar alfombra con shift + mano vacía
+            if (stack.isEmpty() && !this.getCarpetItem().isEmpty() && player.isShiftKeyDown()) {
+                this.spawnAtLocation(this.getCarpetItem());
+                this.setCarpetItem(ItemStack.EMPTY);
+                return InteractionResult.SUCCESS;
+            }
+            // Poner cofre
+            if (stack.is(net.minecraft.world.level.block.Blocks.CHEST.asItem()) && !this.hasChest()) {
+                if (!player.getAbilities().instabuild) stack.shrink(1);
+                this.setChest(true);
                 this.createInventory();
                 return InteractionResult.SUCCESS;
             }
@@ -538,11 +734,38 @@ public class PegasusEntity extends AbstractChestedHorse {
     }
 
     @Override
+    public void handleEntityEvent(byte id) {
+        super.handleEntityEvent(id);
+        if (id == 7) {
+            // Domado exitosamente — limpiar estado de doma
+            tamingState = TamingState.NONE;
+            tamingTimer = 0;
+            dispatcher.idle();
+        }
+    }
+
+    @Override
     public void openCustomInventoryScreen(Player player) {
         if (!this.level().isClientSide
                 && (!this.isVehicle() || this.hasPassenger(player))
-                && this.isTamed()) {
-            player.openHorseInventory(this, this.inventory);
+                && this.isTamed()
+                && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            dev.architectury.registry.menu.MenuRegistry.openExtendedMenu(
+                    serverPlayer,
+                    new net.minecraft.world.MenuProvider() {
+                        @Override
+                        public net.minecraft.network.chat.Component getDisplayName() {
+                            return net.minecraft.network.chat.Component.translatable("entity.millionhorses.pegasus");
+                        }
+                        @Override
+                        public net.minecraft.world.inventory.AbstractContainerMenu createMenu(
+                                int id, net.minecraft.world.entity.player.Inventory inv, Player p) {
+                            return new com.tobyink.millionhorses.entity.menu.mHorsesMenu(
+                                    id, inv, PegasusEntity.this.getHorseInventory(), PegasusEntity.this);
+                        }
+                    },
+                    buf -> { buf.writeInt(PegasusEntity.this.getId()); buf.writeBoolean(PegasusEntity.this.hasChest()); }
+            );
         }
     }
 

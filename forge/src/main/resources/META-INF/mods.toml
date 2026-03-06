@@ -7,9 +7,9 @@ license = "Insert License Here"
 modId = "millionhorses"
 version = "${version}"
 displayName = "1 Million Horses"
-authors = "Me!"
+authors = "Traincrafter111!"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+A Java port of the amazing 1 Million Horses addon for bedrock by Cynosia
 '''
 #logoFile = ""
 

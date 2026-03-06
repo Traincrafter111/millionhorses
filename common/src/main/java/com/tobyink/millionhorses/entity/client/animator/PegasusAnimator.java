@@ -1,6 +1,5 @@
 package com.tobyink.millionhorses.entity.client.animator;
 
-import com.tobyink.millionhorses.MillionHorsesMod;
 import com.tobyink.millionhorses.entity.mobs.PegasusEntity;
 import mod.azure.azurelib.animation.AzAnimatorConfig;
 import mod.azure.azurelib.animation.controller.AzAnimationController;
@@ -11,36 +10,24 @@ import org.jetbrains.annotations.NotNull;
 
 public class PegasusAnimator extends AzEntityAnimator<PegasusEntity> {
 
-    private static final  ResourceLocation ANIMATIONS = MillionHorsesMod.modResource(
-            "animations/entity/cyn_pegasus.animation.json"
+    private static final ResourceLocation ANIMATIONS = new ResourceLocation(
+            "millionhorses", "animations/entity/cyn_pegasus.animation.json"
     );
-
 
     public PegasusAnimator() {
         super(AzAnimatorConfig.defaultConfig());
     }
 
-
     @Override
-    public void registerControllers(AzAnimationControllerContainer<PegasusEntity> animationControllerContainer) {
-        animationControllerContainer.add(
-                AzAnimationController.builder(this, "base_controller")
-                        .build()
+    public void registerControllers(AzAnimationControllerContainer<PegasusEntity> c) {
+        c.add(AzAnimationController.builder(this, "base_controller").build());
+        c.add(AzAnimationController.builder(this, "tail_controller").build());
+        c.add(AzAnimationController.builder(this, "action_controller")
+                .setTransitionLength(5)
+                .build()
         );
-        animationControllerContainer.add(
-                AzAnimationController.builder(this, "tail_controller")
-                        .setTransitionLength(5)
-                        .build()
-        );
-        animationControllerContainer.add(
-                AzAnimationController.builder(this, "action_controller")
-                        .setTransitionLength(5)
-                        .build()
-        );
-        animationControllerContainer.add(
-                AzAnimationController.builder(this, "sleep_controller")
-                        .build()
-        );
+        c.add(AzAnimationController.builder(this, "sleep_controller").build());
+        c.add(AzAnimationController.builder(this, "baby_controller").build());
     }
 
     @Override

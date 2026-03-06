@@ -3,9 +3,9 @@
   "id": "millionhorses",
   "version": "${version}",
   "name": "1 Million Horses",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "A Java port of the amazing 1 Million Horses addon for bedrock by Cynosia",
   "authors": [
-    "Me!"
+    "Traincrafter111!"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",

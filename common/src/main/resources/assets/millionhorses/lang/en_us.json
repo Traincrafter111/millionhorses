@@ -1,3 +1,5 @@
 {
-  "entity.millionhorses.pegasus": "Pegasus"
+  "itemGroup.millionhorses.million_horses_tab": "1 Million Horses",
+  "entity.millionhorses.pegasus": "Pegasus",
+  "item.millionhorses.pegasus_spawn_egg": "Pegasus Spawn Egg"
 }

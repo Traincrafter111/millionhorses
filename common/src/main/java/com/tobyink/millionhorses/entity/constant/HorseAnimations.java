@@ -51,7 +51,7 @@ public class HorseAnimations {
             BASE_CONTROLLER, "animation.cyn_horse.standup", AzPlayBehaviors.PLAY_ONCE
     );
     private static final AzCommand BUCK_COMMAND = AzCommand.create(
-            BASE_CONTROLLER, "animation.cyn_horse.buck", AzPlayBehaviors.PLAY_ONCE
+            BASE_CONTROLLER, "animation.cyn_horse.buck", AzPlayBehaviors.LOOP
     );
     private static final AzCommand REAR_COMMAND = AzCommand.create(
             BASE_CONTROLLER, "animation.cyn_horse.rear", AzPlayBehaviors.LOOP
@@ -73,6 +73,9 @@ public class HorseAnimations {
     );
     private static final AzCommand BABY_COMMAND = AzCommand.create(
             BASE_CONTROLLER, "animation.cyn_horse.baby", AzPlayBehaviors.LOOP
+    );
+    private static final AzCommand BABY_POSE_COMMAND = AzCommand.create(
+            "baby_controller", "animation.cyn_horse.baby", AzPlayBehaviors.LOOP
     );
     private static final AzCommand BABYBORN_COMMAND = AzCommand.create(
             BASE_CONTROLLER, "animation.cyn_horse.babyborn", AzPlayBehaviors.PLAY_ONCE
@@ -105,5 +108,6 @@ public class HorseAnimations {
     public void sleepLay()   { SLEEP_LAY_COMMAND.sendForEntity(animatedEntity); }
     public void sleepUnlay() { SLEEP_UNLAY_COMMAND.sendForEntity(animatedEntity); }
     public void baby()       { BABY_COMMAND.sendForEntity(animatedEntity); }
+    public void babyPose()   { BABY_POSE_COMMAND.sendForEntity(animatedEntity); }
     public void babyBorn()   { BABYBORN_COMMAND.sendForEntity(animatedEntity); }
 }
