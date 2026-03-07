@@ -20,11 +20,11 @@ public final class MillionHorsesMod {
     }
 
     public static void initClient() {
-        EntityRendererRegistry.register(EntityRegistry.PEGASUS, PegasusRenderer::new);
+        // EntityRenderer: en Forge lo registra MillionHorsesModForgeClient.registerRenderers
+        // En Fabric lo registra MillionHorsesModFabricClient via EntityRendererRegistry
         MenuRegistry.registerScreenFactory(
                 com.tobyink.millionhorses.registry.MenuRegistry.PEGASUS_MENU.get(),
                 mHorsesScreen::new);
-        // Sin tintado para que se vea la textura custom del spawn egg
         dev.architectury.registry.client.rendering.ColorHandlerRegistry.registerItemColors(
                 (stack, tintIndex) -> -1,
                 ItemRegistry.PEGASUS_SPAWN_EGG

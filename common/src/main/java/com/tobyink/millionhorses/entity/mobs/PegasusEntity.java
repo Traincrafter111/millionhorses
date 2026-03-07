@@ -50,8 +50,8 @@ public class PegasusEntity extends AbstractChestedHorse {
     private static final EntityDataAccessor<Boolean> PEGASUS_FLYING =
             SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.BOOLEAN);
     // Carpet sincronizada via EntityData para que el cliente la vea sin GUI abierto
-    private static final EntityDataAccessor<net.minecraft.nbt.CompoundTag> CARPET_ITEM_DATA =
-            SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final EntityDataAccessor<ItemStack> CARPET_ITEM_DATA =
+            SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.ITEM_STACK);
 
     private boolean variantSetByNbt = false;
     private boolean babyBornPlayed  = false;
@@ -109,7 +109,12 @@ public class PegasusEntity extends AbstractChestedHorse {
         super.defineSynchedData();
         this.entityData.define(PEGASUS_VARIANT, 0);
         this.entityData.define(PEGASUS_FLYING, false);
-        this.entityData.define(CARPET_ITEM_DATA, new net.minecraft.nbt.CompoundTag());
+        this.entityData.define(CARPET_ITEM_DATA, ItemStack.EMPTY);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(net.minecraft.network.syncher.EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
     }
 
     // --- Variant ---
@@ -182,7 +187,7 @@ public class PegasusEntity extends AbstractChestedHorse {
                 if (!carpetStack.isEmpty()) {
                     this.inventory.setItem(2, carpetStack);
                     // Sincronizar al cliente
-                    this.entityData.set(CARPET_ITEM_DATA, carpetStack.save(new net.minecraft.nbt.CompoundTag()));
+                    this.entityData.set(CARPET_ITEM_DATA, carpetStack.copy());
                 }
             }
             this.variantSetByNbt = true;
@@ -312,17 +317,24 @@ public class PegasusEntity extends AbstractChestedHorse {
     public net.minecraft.world.SimpleContainer getHorseInventory() { return this.inventory; }
 
     // --- Carpet (slot 2) ---
+    @Override
+    public void containerChanged(net.minecraft.world.Container container) {
+        super.containerChanged(container);
+        if (!level().isClientSide && this.inventory != null) {
+            ItemStack carpetInSlot = this.inventory.getItem(2);
+            ItemStack currentSync = this.entityData.get(CARPET_ITEM_DATA);
+            // Solo actualizar si cambió para no spamear
+            if (!ItemStack.matches(carpetInSlot, currentSync)) {
+                this.entityData.set(CARPET_ITEM_DATA, carpetInSlot.isEmpty() ? ItemStack.EMPTY : carpetInSlot.copy());
+            }
+        }
+    }
     public ItemStack getCarpetItem() {
-        net.minecraft.nbt.CompoundTag tag = this.entityData.get(CARPET_ITEM_DATA);
-        if (tag.isEmpty()) return ItemStack.EMPTY;
-        return ItemStack.of(tag);
+        return this.entityData.get(CARPET_ITEM_DATA);
     }
     public void setCarpetItem(ItemStack stack) {
-        // Guardar en inventory para persistencia
         if (this.inventory != null) this.inventory.setItem(2, stack);
-        // Sincronizar al cliente via entityData
-        this.entityData.set(CARPET_ITEM_DATA,
-                stack.isEmpty() ? new net.minecraft.nbt.CompoundTag() : stack.save(new net.minecraft.nbt.CompoundTag()));
+        this.entityData.set(CARPET_ITEM_DATA, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
     }
 
     // --- Attributes ---
@@ -352,17 +364,6 @@ public class PegasusEntity extends AbstractChestedHorse {
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-    }
-
-    private int getFoodTemper(ItemStack stack) {
-        if (stack.is(Items.SUGAR))                  return 3;
-        if (stack.is(Items.WHEAT))                  return 3;
-        if (stack.is(Items.APPLE))                  return 3;
-        if (stack.is(Items.GOLDEN_CARROT))          return 5;
-        if (stack.is(Items.HAY_BLOCK))              return 15;
-        if (stack.is(Items.GOLDEN_APPLE))           return 10;
-        if (stack.is(Items.ENCHANTED_GOLDEN_APPLE)) return 10;
-        return 0;
     }
 
     // --- Death Drops ---
@@ -626,101 +627,46 @@ public class PegasusEntity extends AbstractChestedHorse {
 
     // --- Interacción ---
     // Ticks de crecimiento que reduce cada comida (igual que vanilla AbstractHorse)
-    private int getBabyAgeUpAmount(ItemStack stack) {
-        if (stack.is(Items.SUGAR))                   return 30 * 20;
-        if (stack.is(Items.WHEAT))                   return 20 * 20;
-        if (stack.is(Items.APPLE))                   return 60 * 20;
-        if (stack.is(Items.GOLDEN_CARROT))           return 60 * 20;
-        if (stack.is(Items.GOLDEN_APPLE))            return 240 * 20;
-        if (stack.is(Items.ENCHANTED_GOLDEN_APPLE))  return 240 * 20;
-        if (stack.is(Items.HAY_BLOCK))               return 180 * 20;
-        return 0;
-    }
-
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (level().isClientSide) return InteractionResult.CONSUME;
+        if (level().isClientSide) return InteractionResult.SUCCESS;
 
-        // Bebé + comida → reducir tiempo de crecimiento
-        if (this.isBaby() && this.isFood(stack)) {
-            int amount = getBabyAgeUpAmount(stack);
-            if (amount > 0) {
-                if (!player.getAbilities().instabuild) stack.shrink(1);
-                this.ageUp(amount, true);
-                this.heal(2.0F);
-                this.playSound(SoundEvents.HORSE_EAT, 1.0F, 1.0F);
-                this.level().broadcastEntityEvent(this, (byte) 6);
-                return InteractionResult.SUCCESS;
-            }
-        }
-
-        if (!this.isTamed()) {
-            // Comida en mano → aumentar temperamento
-            if (this.isFood(stack) && this.getTemper() < this.getMaxTemper()) {
-                if (!player.getAbilities().instabuild) stack.shrink(1);
-                this.modifyTemper(getFoodTemper(stack));
-                this.heal(2.0F);
-                this.playSound(SoundEvents.HORSE_EAT, 1.0F, 1.0F);
-                this.level().broadcastEntityEvent(this, (byte) 6);
-                return InteractionResult.SUCCESS;
-            }
-            // Solo montar con mano vacía
-            if (stack.isEmpty() && !this.isBaby()) {
-                player.startRiding(this);
-            }
-            return InteractionResult.SUCCESS;
-        }
-
-        // Tijeras: quitar cofre — cualquier jugador
-        if (stack.is(net.minecraft.world.item.Items.SHEARS) && this.hasChest()) {
-            for (int i = 3; i < this.getHorseInventory().getContainerSize(); i++) {
-                ItemStack chestItem = this.getHorseInventory().getItem(i);
-                if (!chestItem.isEmpty()) {
-                    this.spawnAtLocation(chestItem);
-                    this.getHorseInventory().setItem(i, ItemStack.EMPTY);
+        // Tijeras: solo quitar cofre
+        if (stack.is(net.minecraft.world.item.Items.SHEARS)) {
+            // Quitar cofre
+            if (this.hasChest()) {
+                for (int i = 3; i < this.getHorseInventory().getContainerSize(); i++) {
+                    ItemStack chestItem = this.getHorseInventory().getItem(i);
+                    if (!chestItem.isEmpty()) {
+                        this.spawnAtLocation(chestItem);
+                        this.getHorseInventory().setItem(i, ItemStack.EMPTY);
+                    }
                 }
+                this.setChest(false);
+                this.spawnAtLocation(net.minecraft.world.level.block.Blocks.CHEST.asItem());
+                this.createInventory();
+                this.playSound(net.minecraft.sounds.SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
+                if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player,
+                        p -> p.broadcastBreakEvent(hand));
+                return InteractionResult.SUCCESS;
             }
-            this.setChest(false);
-            this.spawnAtLocation(net.minecraft.world.level.block.Blocks.CHEST.asItem());
-            this.createInventory();
-            this.playSound(net.minecraft.sounds.SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
-            if (!player.getAbilities().instabuild) stack.hurtAndBreak(1, player,
-                    p -> p.broadcastBreakEvent(hand));
-            return InteractionResult.SUCCESS;
         }
 
         boolean isOwner = this.getOwnerUUID() == null
                 || player.getUUID().equals(this.getOwnerUUID());
 
         if (isOwner) {
-            if (this.isBreedingItem(stack) && !this.isBaby()) {
-                if (!player.getAbilities().instabuild) stack.shrink(1);
-                this.setInLove(player);
-                this.playSound(SoundEvents.HORSE_EAT, 1.0F, 1.0F);
-                return InteractionResult.SUCCESS;
-            }
-            if (this.isFood(stack) && this.getHealth() < this.getMaxHealth()) {
-                if (!player.getAbilities().instabuild) stack.shrink(1);
-                this.heal(4.0F);
-                this.playSound(SoundEvents.HORSE_EAT, 1.0F, 1.0F);
-                return InteractionResult.SUCCESS;
-            }
-            // Equipar alfombra
+            // Poner carpet con click derecho
             if (com.tobyink.millionhorses.entity.client.renderer.layer.PegasusCarpetLayer.isCarpet(stack)
                     && this.getCarpetItem().isEmpty()) {
                 ItemStack carpet = stack.copy();
                 carpet.setCount(1);
                 this.setCarpetItem(carpet);
                 if (!player.getAbilities().instabuild) stack.shrink(1);
-                this.playSound(SoundEvents.LLAMA_SWAG, 1.0F, 1.0F);
+                this.playSound(net.minecraft.sounds.SoundEvents.LLAMA_SWAG, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS;
             }
-            // Quitar alfombra con shift + mano vacía
-            if (stack.isEmpty() && !this.getCarpetItem().isEmpty() && player.isShiftKeyDown()) {
-                this.spawnAtLocation(this.getCarpetItem());
-                this.setCarpetItem(ItemStack.EMPTY);
-                return InteractionResult.SUCCESS;
-            }
+            // breeding y curación los maneja super.mobInteract
             // Poner cofre
             if (stack.is(net.minecraft.world.level.block.Blocks.CHEST.asItem()) && !this.hasChest()) {
                 if (!player.getAbilities().instabuild) stack.shrink(1);
