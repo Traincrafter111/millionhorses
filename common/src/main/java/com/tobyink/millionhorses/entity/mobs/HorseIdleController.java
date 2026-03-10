@@ -2,7 +2,7 @@ package com.tobyink.millionhorses.entity.mobs;
 
 import com.tobyink.millionhorses.entity.constant.HorseAnimations;
 
-public class PegasusIdleController {
+public class HorseIdleController {
 
     public enum IdleState {
         IDLE, SIT, SLEEP_STAND, SLEEP_SIT, SLEEP_LAY, TRANSITIONING, REARING
@@ -28,7 +28,7 @@ public class PegasusIdleController {
     private final PegasusEntity pegasus;
     private final HorseAnimations dispatcher;
 
-    public PegasusIdleController(PegasusEntity pegasus, HorseAnimations dispatcher) {
+    public HorseIdleController(PegasusEntity pegasus, HorseAnimations dispatcher) {
         this.pegasus    = pegasus;
         this.dispatcher = dispatcher;
         this.animTimer  = nextAnimInterval();

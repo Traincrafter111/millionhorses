@@ -108,20 +108,20 @@
 [Architectury Transformer DEBUG]  - C:\Users\MI PC\.gradle\caches\modules-2\files-2.1\io.netty\netty-transport-native-epoll\4.1.82.Final\476409d6255001ca53a55f65b01c13822f8dc93a\netty-transport-native-epoll-4.1.82.Final-linux-aarch_64.jar
 [Architectury Transformer DEBUG]  - C:\Users\MI PC\IdeaProjects\1millionHorses\.gradle\loom-cache\remapped_mods\remapped\dev\architectury\architectury-forge-10989656\9.2.14\architectury-forge-10989656-9.2.14.jar
 [Architectury Transformer DEBUG]  - C:\Users\MI PC\IdeaProjects\1millionHorses\.gradle\loom-cache\remapped_mods\remapped\mod\azure\azurelib\azurelib-neo-1.20.1-10989656\3.1.2\azurelib-neo-1.20.1-10989656-3.1.2.jar
-[Architectury Transformer] Read classpath in 1.169 s
+[Architectury Transformer] Read classpath in 1.258 s
 [Architectury Transformer DEBUG] Closed File Systems for C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar
-[Architectury Transformer DEBUG] Transforming 8 transformer(s) from C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar to C:\Users\MIPC~1\AppData\Local\Temp\15656579754754239602.jar: 
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RuntimeMixinRefmapDetector@75c072cb
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformExpectPlatform@1f1c7bf6
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapInjectables@25b485ba
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformPlatformOnly@2b546384
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeAnnotations@5d740a0f
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment@214b199c
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.GenerateFakeForgeMod@20d3d15a
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.FixForgeMixin@2893de87
-[Architectury Transformer DEBUG] Transforming from C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar to C:\Users\MIPC~1\AppData\Local\Temp\15656579754754239602.jar with 8 transformer(s) on dev.architectury.transformer.handler.SimpleTransformerHandler
+[Architectury Transformer DEBUG] Transforming 8 transformer(s) from C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar to C:\Users\MIPC~1\AppData\Local\Temp\10844968944131249996.jar: 
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RuntimeMixinRefmapDetector@4e91d63f
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformExpectPlatform@d4342c2
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapInjectables@2bbf180e
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformPlatformOnly@163e4e87
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeAnnotations@56de5251
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment@419c5f1a
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.GenerateFakeForgeMod@12b0404f
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.FixForgeMixin@769e7ee8
+[Architectury Transformer DEBUG] Transforming from C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar to C:\Users\MIPC~1\AppData\Local\Temp\10844968944131249996.jar with 8 transformer(s) on dev.architectury.transformer.handler.SimpleTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
@@ -129,31 +129,37 @@
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/MillionHorsesMod with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/animator/PegasusAnimator with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/screen/mHorsesScreen with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/constant/HorseAnimations with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/constant/MovementMode with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$1 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$3 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$1 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$2 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/HorseIdleController with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusIdleController with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$2 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/variant/AlicornVariant with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/variant/PegasusVariant with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/HorseWhistleItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/HorseWhistleItem$1 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/PegasusSpawnEggItem with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/mixin/LivingEntityMixin with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/TabRegistry with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/SoundRegistry with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/ItemRegistry with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/EntityRegistry with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/TagRegistry with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/ItemRegistry with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/BlockRegistry with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/TabRegistry with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/MenuRegistry with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/SoundRegistry with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/BlockRegistry with maxs=true frames=true
 [Architectury Transformer DEBUG] Checking whether /millionhorses-common-common-refmap.json is a mixin config.
 [Architectury Transformer DEBUG] Checking whether /millionhorses.mixins.json is a mixin config.
 [Architectury Transformer DEBUG] Checking whether /millionhorses-common-common-refmap.json is a mixin config.
@@ -161,14 +167,14 @@
 [Architectury Transformer DEBUG] Found mixin config(s): millionhorses.mixins.json
 [Architectury Transformer DEBUG] Appended Launch Argument: [--mixin.config, millionhorses.mixins.json]
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Closed File Systems for C:\Users\MIPC~1\AppData\Local\Temp\15656579754754239602.jar
+[Architectury Transformer DEBUG] Closed File Systems for C:\Users\MIPC~1\AppData\Local\Temp\10844968944131249996.jar
 [Architectury Transformer] Listening at C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar
-[Architectury Transformer DEBUG] Temporary jar [C:\Users\MIPC~1\AppData\Local\Temp\15656579754754239602.jar] contains packages: com.tobyink.millionhorses.mixin, com.tobyink.millionhorses.entity.client.renderer.layer, com.tobyink.millionhorses.registry, com.tobyink.millionhorses, com.tobyink.millionhorses.entity.client.animator, com.tobyink.millionhorses.item, com.tobyink.millionhorses.entity.client.screen, com.tobyink.millionhorses.entity.mobs, com.tobyink.millionhorses.entity.client.renderer, com.tobyink.millionhorses.entity.variant, com.tobyink.millionhorses.entity.menu, com.tobyink.millionhorses.entity.constant
+[Architectury Transformer DEBUG] Temporary jar [C:\Users\MIPC~1\AppData\Local\Temp\10844968944131249996.jar] contains packages: com.tobyink.millionhorses.mixin, com.tobyink.millionhorses.entity.client.renderer.layer, com.tobyink.millionhorses.registry, com.tobyink.millionhorses, com.tobyink.millionhorses.entity.client.animator, com.tobyink.millionhorses.item, com.tobyink.millionhorses.entity.client.screen, com.tobyink.millionhorses.entity.mobs, com.tobyink.millionhorses.entity.client.renderer, com.tobyink.millionhorses.entity.variant, com.tobyink.millionhorses.entity.menu, com.tobyink.millionhorses.entity.constant
 [Architectury Transformer DEBUG] Closed File Systems for C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar
 [Architectury Transformer DEBUG] Classpath entry [C:\Users\MI PC\IdeaProjects\1millionHorses\forge\build\resources\main] contains packages: 
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/mixin/LivingEntityMixin.class to com/tobyink/millionhorses/mixin/LivingEntityMixin.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping with Dirty Mappings...
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
@@ -176,244 +182,264 @@
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/mixin/LivingEntityMixin with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/mixin/LivingEntityMixin in 60.82 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/mixin/LivingEntityMixin in 82.67 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/MillionHorsesMod.class to com/tobyink/millionhorses/MillionHorsesMod.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/MillionHorsesMod with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/MillionHorsesMod in 24.82 ms
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/EntityRegistry.class to com/tobyink/millionhorses/registry/EntityRegistry.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
-[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
-[Architectury Transformer DEBUG] Remapping Classes:
-[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
-[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/EntityRegistry with maxs=true frames=true
-[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/EntityRegistry in 11.35 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/MillionHorsesMod in 37.49 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity in 23.63 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity in 38.93 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/EntityRegistry.class to com/tobyink/millionhorses/registry/EntityRegistry.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
+[Architectury Transformer DEBUG] Remapping Classes:
+[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
+[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/EntityRegistry with maxs=true frames=true
+[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/EntityRegistry in 47.99 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
+[Architectury Transformer DEBUG] Remapping Classes:
+[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
+[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal with maxs=true frames=true
+[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal in 21.91 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
+[Architectury Transformer DEBUG] Remapping Classes:
+[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
+[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal with maxs=true frames=true
+[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal in 20.55 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$1.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$1.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 in 25.33 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 in 17.04 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/ItemRegistry.class to com/tobyink/millionhorses/registry/ItemRegistry.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/ItemRegistry with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/ItemRegistry in 13.02 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/ItemRegistry in 9.221 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/item/PegasusSpawnEggItem.class to com/tobyink/millionhorses/item/PegasusSpawnEggItem.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/PegasusSpawnEggItem with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/item/PegasusSpawnEggItem in 11.43 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/item/PegasusSpawnEggItem in 6.156 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/item/HorseWhistleItem.class to com/tobyink/millionhorses/item/HorseWhistleItem.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
+[Architectury Transformer DEBUG] Remapping Classes:
+[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
+[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/HorseWhistleItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/item/HorseWhistleItem in 9.167 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/SoundRegistry.class to com/tobyink/millionhorses/registry/SoundRegistry.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
+[Architectury Transformer DEBUG] Remapping Classes:
+[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
+[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/SoundRegistry with maxs=true frames=true
+[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/SoundRegistry in 9.832 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/TabRegistry.class to com/tobyink/millionhorses/registry/TabRegistry.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/TabRegistry with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/TabRegistry in 14.06 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/TabRegistry in 6.760 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/MenuRegistry.class to com/tobyink/millionhorses/registry/MenuRegistry.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/MenuRegistry with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/MenuRegistry in 10.23 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/MenuRegistry in 11.71 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/menu/mHorsesMenu.class to com/tobyink/millionhorses/entity/menu/mHorsesMenu.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu in 7.803 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu in 14.04 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer.class to com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer in 7.978 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer in 6.494 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/variant/PegasusVariant.class to com/tobyink/millionhorses/entity/variant/PegasusVariant.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/variant/PegasusVariant with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/variant/PegasusVariant in 4.542 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/variant/PegasusVariant in 5.170 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/screen/mHorsesScreen.class to com/tobyink/millionhorses/entity/client/screen/mHorsesScreen.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/screen/mHorsesScreen with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/screen/mHorsesScreen in 30.11 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/screen/mHorsesScreen in 40.82 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/animator/PegasusAnimator.class to com/tobyink/millionhorses/entity/client/animator/PegasusAnimator.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/animator/PegasusAnimator with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/animator/PegasusAnimator in 6.886 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/animator/PegasusAnimator in 8.425 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer.class to com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer in 5.540 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer in 12.84 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer.class to com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer in 6.836 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer in 8.131 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/constant/MovementMode.class to com/tobyink/millionhorses/entity/constant/MovementMode.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
+[Architectury Transformer DEBUG] Remapping Classes:
+[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
+[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/constant/MovementMode with maxs=true frames=true
+[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/constant/MovementMode in 7.382 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState in 10.86 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState in 6.220 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/constant/HorseAnimations.class to com/tobyink/millionhorses/entity/constant/HorseAnimations.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/constant/HorseAnimations with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/constant/HorseAnimations in 7.986 ms
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusIdleController.class to com/tobyink/millionhorses/entity/mobs/PegasusIdleController.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/constant/HorseAnimations in 6.214 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/HorseIdleController.class to com/tobyink/millionhorses/entity/mobs/HorseIdleController.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusIdleController with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/HorseIdleController with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusIdleController in 7.843 ms
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState.class to com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/HorseIdleController in 5.941 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState.class to com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState in 7.444 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState in 4.647 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim in 8.398 ms
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$2.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$2.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim in 5.613 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/item/HorseWhistleItem$1.class to com/tobyink/millionhorses/item/HorseWhistleItem$1.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000029bfe08ba40@16ec5519
 [Architectury Transformer DEBUG] Remapping Classes:
 [Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
 [Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
 [Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$2 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/HorseWhistleItem$1 with maxs=true frames=true
 [Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$2 in 16.04 ms
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/menu/mHorsesMenu$1.class to com/tobyink/millionhorses/entity/menu/mHorsesMenu$1.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
-[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
-[Architectury Transformer DEBUG] Remapping Classes:
-[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
-[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu$1 in 17.98 ms
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/menu/mHorsesMenu$2.class to com/tobyink/millionhorses/entity/menu/mHorsesMenu$2.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
-[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
-[Architectury Transformer DEBUG] Remapping Classes:
-[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
-[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$2 with maxs=true frames=true
-[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu$2 in 4.341 ms
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/menu/mHorsesMenu$3.class to com/tobyink/millionhorses/entity/menu/mHorsesMenu$3.class with 8 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
-[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda/0x0000023dee08ba40@318ba8c8
-[Architectury Transformer DEBUG] Remapping Classes:
-[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
-[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$3 with maxs=true frames=true
-[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: millionhorses-forge-forge-refmap.json
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu$3 in 4.143 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/item/HorseWhistleItem$1 in 26.79 ms

@@ -1,5 +1,21 @@
 {
   "itemGroup.millionhorses.million_horses_tab": "1 Million Horses",
   "entity.millionhorses.pegasus": "Pegasus",
-  "item.millionhorses.pegasus_spawn_egg": "Pegasus Spawn Egg"
+  "item.millionhorses.pegasus_spawn_egg": "Pegasus Spawn Egg",
+  "item.millionhorses.horse_whistle": "Horse Whistle",
+
+  "item.millionhorses.horse_whistle.mode.wandering": "§7Mode: §fWander",
+  "item.millionhorses.horse_whistle.mode.following": "§7Mode: §aFollow",
+  "item.millionhorses.horse_whistle.mode.sitting":   "§7Mode: §eStay",
+
+  "item.millionhorses.horse_whistle.activate.wandering": "§f%s horse(s) set to Wander",
+  "item.millionhorses.horse_whistle.activate.following": "§a%s horse(s) set to Follow",
+  "item.millionhorses.horse_whistle.activate.sitting":   "§e%s horse(s) set to Stay",
+
+  "item.millionhorses.horse_whistle.no_horse": "§cNo tamed horses nearby",
+
+  "item.millionhorses.horse_whistle.tooltip.mode.wandering": "§7Selected: §fWander",
+  "item.millionhorses.horse_whistle.tooltip.mode.following": "§7Selected: §aFollow",
+  "item.millionhorses.horse_whistle.tooltip.mode.sitting":   "§7Selected: §eStay",
+  "item.millionhorses.horse_whistle.tooltip.hint": "§8Right-click to change mode  |  Shift+Right-click to apply"
 }

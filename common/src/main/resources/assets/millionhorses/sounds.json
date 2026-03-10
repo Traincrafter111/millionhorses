@@ -1,0 +1,11 @@
+{
+  "whistle_wander": {
+    "sounds": [ "millionhorses:item/whistle_wander" ]
+  },
+  "whistle_follow": {
+    "sounds": [ "millionhorses:item/whistle_follow" ]
+  },
+  "whistle_stay": {
+    "sounds": [ "millionhorses:item/whistle_stay" ]
+  }
+}

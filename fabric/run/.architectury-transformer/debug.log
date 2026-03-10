@@ -114,15 +114,15 @@
 [Architectury Transformer DEBUG]  - C:\Users\MI PC\IdeaProjects\1millionHorses\.gradle\loom-cache\remapped_mods\remapped\net\fabricmc\fabric-api\fabric-resource-loader-v0-65f153da\0.11.12+fb82e9d777\fabric-resource-loader-v0-65f153da-0.11.12+fb82e9d777.jar
 [Architectury Transformer DEBUG]  - C:\Users\MI PC\IdeaProjects\1millionHorses\.gradle\loom-cache\remapped_mods\remapped\net\fabricmc\fabric-api\fabric-sound-api-v1-65f153da\1.0.14+1802ada577\fabric-sound-api-v1-65f153da-1.0.14+1802ada577.jar
 [Architectury Transformer DEBUG]  - C:\Users\MI PC\IdeaProjects\1millionHorses\.gradle\loom-cache\remapped_mods\remapped\net\fabricmc\fabric-api\fabric-transitive-access-wideners-v1-65f153da\4.3.2+1802ada577\fabric-transitive-access-wideners-v1-65f153da-4.3.2+1802ada577.jar
-[Architectury Transformer] Read classpath in 1.137 s
+[Architectury Transformer] Read classpath in 1.192 s
 [Architectury Transformer DEBUG] Closed File Systems for C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar
-[Architectury Transformer DEBUG] Transforming 5 transformer(s) from C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar to C:\Users\MIPC~1\AppData\Local\Temp\4516570920102030439.jar: 
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RuntimeMixinRefmapDetector@4df828d7
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.GenerateFakeFabricMod@b59d31
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformExpectPlatform@62fdb4a6
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapInjectables@11e21d0e
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformPlatformOnly@1dd02175
-[Architectury Transformer DEBUG] Transforming from C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar to C:\Users\MIPC~1\AppData\Local\Temp\4516570920102030439.jar with 5 transformer(s) on dev.architectury.transformer.handler.SimpleTransformerHandler
+[Architectury Transformer DEBUG] Transforming 5 transformer(s) from C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar to C:\Users\MIPC~1\AppData\Local\Temp\8610800923482913272.jar: 
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RuntimeMixinRefmapDetector@780cb77
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.GenerateFakeFabricMod@691a7f8f
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformExpectPlatform@50a7bc6e
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapInjectables@161b062a
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformPlatformOnly@17c1bced
+[Architectury Transformer DEBUG] Transforming from C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar to C:\Users\MIPC~1\AppData\Local\Temp\8610800923482913272.jar with 5 transformer(s) on dev.architectury.transformer.handler.SimpleTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/animator/PegasusAnimator with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer with maxs=true frames=true
@@ -130,18 +130,24 @@
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/screen/mHorsesScreen with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/constant/HorseAnimations with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/constant/MovementMode with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$1 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$2 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$3 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/HorseIdleController with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$2 with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusIdleController with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/variant/AlicornVariant with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/variant/PegasusVariant with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/HorseWhistleItem$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/HorseWhistleItem with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/PegasusSpawnEggItem with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/MillionHorsesMod with maxs=true frames=true
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/mixin/LivingEntityMixin with maxs=true frames=true
@@ -154,108 +160,116 @@
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/TagRegistry with maxs=true frames=true
 [Architectury Transformer DEBUG] Checking whether /millionhorses-common-common-refmap.json is a mixin config.
 [Architectury Transformer DEBUG] Checking whether /millionhorses.mixins.json is a mixin config.
-[Architectury Transformer DEBUG] Closed File Systems for C:\Users\MIPC~1\AppData\Local\Temp\4516570920102030439.jar
+[Architectury Transformer DEBUG] Closed File Systems for C:\Users\MIPC~1\AppData\Local\Temp\8610800923482913272.jar
 [Architectury Transformer] Listening at C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar
-[Architectury Transformer DEBUG] Temporary jar [C:\Users\MIPC~1\AppData\Local\Temp\4516570920102030439.jar] contains packages: com.tobyink.millionhorses.mixin, com.tobyink.millionhorses.entity.client.renderer.layer, com.tobyink.millionhorses.registry, com.tobyink.millionhorses, com.tobyink.millionhorses.entity.client.animator, com.tobyink.millionhorses.item, com.tobyink.millionhorses.entity.client.screen, com.tobyink.millionhorses.entity.mobs, com.tobyink.millionhorses.entity.client.renderer, com.tobyink.millionhorses.entity.variant, com.tobyink.millionhorses.entity.menu, com.tobyink.millionhorses.entity.constant
+[Architectury Transformer DEBUG] Temporary jar [C:\Users\MIPC~1\AppData\Local\Temp\8610800923482913272.jar] contains packages: com.tobyink.millionhorses.mixin, com.tobyink.millionhorses.entity.client.renderer.layer, com.tobyink.millionhorses.registry, com.tobyink.millionhorses, com.tobyink.millionhorses.entity.client.animator, com.tobyink.millionhorses.item, com.tobyink.millionhorses.entity.client.screen, com.tobyink.millionhorses.entity.mobs, com.tobyink.millionhorses.entity.client.renderer, com.tobyink.millionhorses.entity.variant, com.tobyink.millionhorses.entity.menu, com.tobyink.millionhorses.entity.constant
 [Architectury Transformer DEBUG] Closed File Systems for C:\Users\MI PC\IdeaProjects\1millionHorses\common\build\devlibs\millionhorses-common-1.0.0-dev.jar
 [Architectury Transformer DEBUG] Classpath entry [C:\Users\MI PC\IdeaProjects\1millionHorses\fabric\build\resources\main] contains packages: 
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/mixin/LivingEntityMixin.class to com/tobyink/millionhorses/mixin/LivingEntityMixin.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/mixin/LivingEntityMixin with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/mixin/LivingEntityMixin in 5.486 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/mixin/LivingEntityMixin in 6.270 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/MillionHorsesMod.class to com/tobyink/millionhorses/MillionHorsesMod.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/MillionHorsesMod with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/MillionHorsesMod in 1.189 ms
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/EntityRegistry.class to com/tobyink/millionhorses/registry/EntityRegistry.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/EntityRegistry with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/EntityRegistry in 1.115 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/MillionHorsesMod in 1.834 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity in 6.263 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity in 2.719 ms
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/EntityRegistry.class to com/tobyink/millionhorses/registry/EntityRegistry.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/EntityRegistry with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/EntityRegistry in 290.2 μs
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$FollowOwnerGoal in 619.4 μs
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$SitGoal in 261.8 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$1.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$1.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 in 1.997 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$1 in 169.7 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/ItemRegistry.class to com/tobyink/millionhorses/registry/ItemRegistry.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/ItemRegistry with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/ItemRegistry in 327.4 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/ItemRegistry in 586.2 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/item/PegasusSpawnEggItem.class to com/tobyink/millionhorses/item/PegasusSpawnEggItem.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/PegasusSpawnEggItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/item/PegasusSpawnEggItem in 257.3 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/item/PegasusSpawnEggItem in 197.3 μs
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/item/HorseWhistleItem.class to com/tobyink/millionhorses/item/HorseWhistleItem.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/HorseWhistleItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/item/HorseWhistleItem in 690.1 μs
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/SoundRegistry.class to com/tobyink/millionhorses/registry/SoundRegistry.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/SoundRegistry with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/SoundRegistry in 282.7 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/TabRegistry.class to com/tobyink/millionhorses/registry/TabRegistry.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/TabRegistry with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/TabRegistry in 352.0 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/TabRegistry in 343.1 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/registry/MenuRegistry.class to com/tobyink/millionhorses/registry/MenuRegistry.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/registry/MenuRegistry with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/MenuRegistry in 232.4 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/registry/MenuRegistry in 382.9 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/menu/mHorsesMenu.class to com/tobyink/millionhorses/entity/menu/mHorsesMenu.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu in 1.011 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu in 478.2 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer.class to com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer in 635.2 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/PegasusRenderer in 908.9 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/variant/PegasusVariant.class to com/tobyink/millionhorses/entity/variant/PegasusVariant.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/variant/PegasusVariant with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/variant/PegasusVariant in 691.2 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/variant/PegasusVariant in 1.128 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/screen/mHorsesScreen.class to com/tobyink/millionhorses/entity/client/screen/mHorsesScreen.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/screen/mHorsesScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/screen/mHorsesScreen in 569.7 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/screen/mHorsesScreen in 832.0 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/animator/PegasusAnimator.class to com/tobyink/millionhorses/entity/client/animator/PegasusAnimator.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/animator/PegasusAnimator with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/animator/PegasusAnimator in 635.6 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/animator/PegasusAnimator in 691.5 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer.class to com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer in 1.364 ms
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/layer/PegasusEquipmentLayer in 1.397 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer.class to com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer in 429.6 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/client/renderer/layer/PegasusCarpetLayer in 482.4 μs
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/constant/MovementMode.class to com/tobyink/millionhorses/entity/constant/MovementMode.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/constant/MovementMode with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/constant/MovementMode in 1.502 ms
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState in 853.6 μs
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$TamingState in 432.7 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/constant/HorseAnimations.class to com/tobyink/millionhorses/entity/constant/HorseAnimations.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/constant/HorseAnimations with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/constant/HorseAnimations in 584.9 μs
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusIdleController.class to com/tobyink/millionhorses/entity/mobs/PegasusIdleController.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/constant/HorseAnimations in 500.6 μs
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/HorseIdleController.class to com/tobyink/millionhorses/entity/mobs/HorseIdleController.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusIdleController with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusIdleController in 799.0 μs
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState.class to com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/HorseIdleController with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/HorseIdleController in 670.3 μs
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState.class to com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusIdleController$IdleState in 322.8 μs
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/HorseIdleController$IdleState in 261.4 μs
 [Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
 [Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim in 416.7 μs
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/mobs/PegasusEntity$2.class to com/tobyink/millionhorses/entity/mobs/PegasusEntity$2.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$BaseAnim in 502.5 μs
+[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/item/HorseWhistleItem$1.class to com/tobyink/millionhorses/item/HorseWhistleItem$1.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/mobs/PegasusEntity$2 with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/mobs/PegasusEntity$2 in 760.4 μs
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/menu/mHorsesMenu$1.class to com/tobyink/millionhorses/entity/menu/mHorsesMenu$1.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu$1 in 320.6 μs
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/menu/mHorsesMenu$2.class to com/tobyink/millionhorses/entity/menu/mHorsesMenu$2.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$2 with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu$2 in 195.7 μs
-[Architectury Transformer DEBUG] Transforming from com/tobyink/millionhorses/entity/menu/mHorsesMenu$3.class to com/tobyink/millionhorses/entity/menu/mHorsesMenu$3.class with 5 transformer(s) on dev.architectury.transformer.handler.TinyRemapperPreparedTransformerHandler
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/entity/menu/mHorsesMenu$3 with maxs=true frames=true
-[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/entity/menu/mHorsesMenu$3 in 141.0 μs
+[Architectury Transformer DEBUG] Writing com/tobyink/millionhorses/item/HorseWhistleItem$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Transformed com/tobyink/millionhorses/item/HorseWhistleItem$1 in 827.6 μs

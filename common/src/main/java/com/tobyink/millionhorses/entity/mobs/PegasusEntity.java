@@ -1,6 +1,7 @@
 package com.tobyink.millionhorses.entity.mobs;
 
 import com.tobyink.millionhorses.entity.constant.HorseAnimations;
+import com.tobyink.millionhorses.entity.constant.MovementMode;
 import com.tobyink.millionhorses.entity.variant.PegasusVariant;
 import mod.azure.azurelib.util.MoveAnalysis;
 import net.minecraft.core.BlockPos;
@@ -32,11 +33,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -49,58 +50,66 @@ public class PegasusEntity extends AbstractChestedHorse {
             SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> PEGASUS_FLYING =
             SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.BOOLEAN);
-    // Carpet sincronizada via EntityData para que el cliente la vea sin GUI abierto
     private static final EntityDataAccessor<ItemStack> CARPET_ITEM_DATA =
             SynchedEntityData.defineId(PegasusEntity.class, EntityDataSerializers.ITEM_STACK);
 
-    private boolean variantSetByNbt = false;
+    protected boolean variantSetByNbt = false;
     private boolean babyBornPlayed  = false;
     private boolean wasBaby         = false;
+
+    // Grupos de atributos (0-9, igual que Bedrock)
+    // Wild: 0-5. Bred: puede llegar a 9 por herencia.
+    private int healthGroupId = 3;
+    private int speedGroupId  = 3;
+    private int jumpGroupId   = 3;
 
     // --- Animation State ---
     public HorseAnimations dispatcher;
     public final MoveAnalysis moveAnalysis;
-    public PegasusIdleController idleController;
+    public HorseIdleController idleController;
 
     private enum BaseAnim { IDLE, WALK, RUN, FLY }
     private BaseAnim baseAnim = null;
     private boolean isRearing = false;
 
+    // --- Movement Mode (silbato) ---
+    private MovementMode movementMode = MovementMode.WANDERING;
+
+    // Goals que se activan/desactivan al cambiar de modo
+    private FollowOwnerGoal followGoal;
+    private SitGoal        sitGoal;
+
     // --- Taming Animation State ---
     private enum TamingState { NONE, BUCKING, REARING }
-    private TamingState tamingState        = TamingState.NONE;
-    private int         tamingTimer        = 0;
-    // BUCK_DURATION varía según temperamento (igual que vanilla):
-    // temperamento alto → buck corto, temperamento bajo → buck largo
+    private TamingState tamingState = TamingState.NONE;
+    private int         tamingTimer = 0;
+
     private int getBuckDuration() {
         int temper = this.getTemper();
         int maxTemper = this.getMaxTemper();
-        // Rango: 140 ticks (7s) cuando temper=0, hasta 60 ticks (3s) cuando temper=maxTemper
         float ratio = (float) temper / maxTemper;
         return (int)(140 - ratio * 80) + this.random.nextInt(40);
     }
-    private static final int REAR_DURATION_TAMING = 60; // ticks de rear tras tirar al jinete (3s)
+    private static final int REAR_DURATION_TAMING = 60;
 
     // --- Flight State ---
-    // Doble salto: 0 = en suelo, 1 = primer salto, 2 = volando
-    private int    jumpCount       = 0;
-    private boolean wasOnGround    = true;
-    private boolean jumpKeyHeld    = false; // detectado via player.jumping en tick
-    private double  prevY          = 0.0;   // para detectar caída en servidor
+    private int     jumpCount    = 0;
+    private boolean wasOnGround  = true;
+    private boolean jumpKeyHeld  = false;
+    private double  prevY        = 0.0;
 
-    // Valores ajustables
-    public static double FLY_ASCEND_SPEED      = 0.12;
-    public static double FLY_DESCEND_SPEED     = -0.06;
-    public static double FLY_FORWARD_SPEED     = 0.55;
-    public static double GROUND_SPEED_BOOST    = 1.6;
-    public static int    CLIFF_MIN_BLOCKS      = 5;
+    public static double FLY_ASCEND_SPEED   = 0.12;
+    public static double FLY_DESCEND_SPEED  = -0.06;
+    public static double FLY_FORWARD_SPEED  = 0.55;
+    public static double GROUND_SPEED_BOOST = 1.6;
+    public static int    CLIFF_MIN_BLOCKS   = 5;
 
     // --- Constructor ---
     public PegasusEntity(EntityType<? extends AbstractChestedHorse> entityType, Level level) {
         super(entityType, level);
         this.moveAnalysis   = new MoveAnalysis(this);
         this.dispatcher     = new HorseAnimations(this);
-        this.idleController = new PegasusIdleController(this, this.dispatcher);
+        this.idleController = new HorseIdleController(this, this.dispatcher);
     }
 
     // --- Synced Data ---
@@ -124,6 +133,19 @@ public class PegasusEntity extends AbstractChestedHorse {
     public void setPegasusVariant(PegasusVariant variant) {
         this.entityData.set(PEGASUS_VARIANT, variant.getId());
     }
+
+    // --- Movement Mode ---
+    public MovementMode getMovementMode() { return this.movementMode; }
+    public void setMovementMode(MovementMode mode) {
+        this.movementMode = mode;
+        // Al cambiar de modo siempre volvemos a idle —
+        // el tick se encargará de actualizar la animación correcta
+        if (!level().isClientSide) {
+            baseAnim = null;
+            dispatcher.idle();
+        }
+    }
+    public boolean isSitting() { return this.movementMode == MovementMode.SITTING; }
 
     // --- Flying ---
     public boolean isPegasusFlying() { return this.entityData.get(PEGASUS_FLYING); }
@@ -163,6 +185,10 @@ public class PegasusEntity extends AbstractChestedHorse {
         super.addAdditionalSaveData(tag);
         tag.putInt("PegasusVariant", this.getPegasusVariant().getId());
         tag.putBoolean("BabyBornPlayed", this.babyBornPlayed);
+        tag.putInt("HealthGroupId", this.healthGroupId);
+        tag.putInt("SpeedGroupId",  this.speedGroupId);
+        tag.putInt("JumpGroupId",   this.jumpGroupId);
+        tag.putString("MovementMode", this.movementMode.name());
         if (!this.inventory.getItem(1).isEmpty()) {
             tag.put("ArmorItem", this.inventory.getItem(1).save(new CompoundTag()));
         }
@@ -186,16 +212,27 @@ public class PegasusEntity extends AbstractChestedHorse {
                 ItemStack carpetStack = ItemStack.of(tag.getCompound("CarpetItem"));
                 if (!carpetStack.isEmpty()) {
                     this.inventory.setItem(2, carpetStack);
-                    // Sincronizar al cliente
                     this.entityData.set(CARPET_ITEM_DATA, carpetStack.copy());
                 }
             }
             this.variantSetByNbt = true;
         } else if (!this.variantSetByNbt) {
-            this.setPegasusVariant(PegasusVariant.byId(this.random.nextInt(PegasusVariant.values().length)));
+            this.setPegasusVariant(randomVariant());
             this.variantSetByNbt = true;
         }
         this.babyBornPlayed = tag.getBoolean("BabyBornPlayed");
+        if (tag.contains("HealthGroupId")) {
+            this.healthGroupId = tag.getInt("HealthGroupId");
+            this.speedGroupId  = tag.getInt("SpeedGroupId");
+            this.jumpGroupId   = tag.getInt("JumpGroupId");
+        }
+        if (tag.contains("MovementMode")) {
+            try {
+                this.movementMode = MovementMode.valueOf(tag.getString("MovementMode"));
+            } catch (IllegalArgumentException e) {
+                this.movementMode = MovementMode.WANDERING;
+            }
+        }
         this.updateContainerEquipment();
     }
 
@@ -205,10 +242,12 @@ public class PegasusEntity extends AbstractChestedHorse {
                                         MobSpawnType spawnType, @Nullable SpawnGroupData spawnData,
                                         @Nullable CompoundTag tag) {
         SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, tag);
-        // Asignar variante aleatoria si no viene del NBT (spawn egg, natural spawn, etc.)
         if (!variantSetByNbt) {
-            this.setPegasusVariant(PegasusVariant.byId(this.random.nextInt(PegasusVariant.values().length)));
+            this.setPegasusVariant(randomVariant());
             variantSetByNbt = true;
+        }
+        if (tag == null || tag.isEmpty()) {
+            this.randomizeAttributes(this.random);
         }
         return data;
     }
@@ -275,6 +314,7 @@ public class PegasusEntity extends AbstractChestedHorse {
 
         foal.setPegasusVariant(foalVariant);
         foal.variantSetByNbt = true;
+        foal.randomizeAttributesFromParents(this.random, this, other);
         return foal;
     }
 
@@ -313,7 +353,6 @@ public class PegasusEntity extends AbstractChestedHorse {
     }
 
     public ItemStack getArmorItem() { return this.getItemBySlot(EquipmentSlot.CHEST); }
-
     public net.minecraft.world.SimpleContainer getHorseInventory() { return this.inventory; }
 
     // --- Carpet (slot 2) ---
@@ -323,34 +362,89 @@ public class PegasusEntity extends AbstractChestedHorse {
         if (!level().isClientSide && this.inventory != null) {
             ItemStack carpetInSlot = this.inventory.getItem(2);
             ItemStack currentSync = this.entityData.get(CARPET_ITEM_DATA);
-            // Solo actualizar si cambió para no spamear
             if (!ItemStack.matches(carpetInSlot, currentSync)) {
                 this.entityData.set(CARPET_ITEM_DATA, carpetInSlot.isEmpty() ? ItemStack.EMPTY : carpetInSlot.copy());
             }
         }
     }
-    public ItemStack getCarpetItem() {
-        return this.entityData.get(CARPET_ITEM_DATA);
-    }
+    public ItemStack getCarpetItem() { return this.entityData.get(CARPET_ITEM_DATA); }
     public void setCarpetItem(ItemStack stack) {
         if (this.inventory != null) this.inventory.setItem(2, stack);
         this.entityData.set(CARPET_ITEM_DATA, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
     }
 
+    // --- Spawn rules ---
+    @Override
+    public boolean checkSpawnRules(net.minecraft.world.level.LevelAccessor level, net.minecraft.world.entity.MobSpawnType reason) {
+        if (this.blockPosition().getY() < 175) return false;
+        net.minecraft.core.BlockPos below = this.blockPosition().below();
+        return level.getBlockState(below).is(net.minecraft.world.level.block.Blocks.HAY_BLOCK);
+    }
+
+    public static boolean checkPegasusSpawnRules(
+            EntityType<PegasusEntity> type,
+            net.minecraft.world.level.ServerLevelAccessor level,
+            net.minecraft.world.entity.MobSpawnType reason,
+            net.minecraft.core.BlockPos pos,
+            net.minecraft.util.RandomSource random) {
+        if (pos.getY() < 175) return false;
+        net.minecraft.core.BlockPos below = pos.below();
+        return level.getBlockState(below).is(net.minecraft.world.level.block.Blocks.HAY_BLOCK);
+    }
+
+    // --- Variante aleatoria con rareza ---
+    private PegasusVariant randomVariant() {
+        int roll = this.random.nextInt(100);
+        if (roll < 25) return PegasusVariant.WHITE;
+        if (roll < 50) return PegasusVariant.PURPLE;
+        if (roll < 75) return PegasusVariant.RAINBOW;
+        if (roll < 81) return PegasusVariant.DARK;
+        if (roll < 87) return PegasusVariant.WHITE_BLUE;
+        if (roll < 93) return PegasusVariant.PURPLE_BLUE;
+        if (roll < 99) return PegasusVariant.RAINBOW_BLUE;
+        return PegasusVariant.DARK_BLUE;
+    }
+
     // --- Attributes ---
+    private static double randomInRange(RandomSource random, double min, double max) {
+        return min + random.nextDouble() * (max - min);
+    }
+    private static double healthForGroup(RandomSource random, int group) {
+        return randomInRange(random, 20.0 + group * 3.0, 23.0 + group * 3.0);
+    }
+    private static double speedForGroup(RandomSource random, int group) {
+        return randomInRange(random, 0.230 + group * 0.032, 0.262 + group * 0.032);
+    }
+    private static double jumpForGroup(RandomSource random, int group) {
+        return randomInRange(random, 0.70 + group * 0.06, 0.76 + group * 0.06);
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return AbstractHorse.createBaseHorseAttributes()
-                .add(Attributes.MAX_HEALTH, 30.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.25)
-                .add(Attributes.JUMP_STRENGTH, 1.0)
+                .add(Attributes.MAX_HEALTH, 99.0)
+                .add(Attributes.MOVEMENT_SPEED, 10.0)
+                .add(Attributes.JUMP_STRENGTH, 5.0)
                 .add(Attributes.ATTACK_DAMAGE, 6.0);
     }
 
+    @Override
     protected void randomizeAttributes(RandomSource random) {
         Objects.requireNonNull(random);
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(generateMaxHealth(random::nextInt));
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(generateSpeed(random::nextDouble));
-        this.getAttribute(Attributes.JUMP_STRENGTH).setBaseValue(generateJumpStrength(random::nextDouble));
+        this.healthGroupId = random.nextInt(6);
+        this.speedGroupId  = random.nextInt(6);
+        this.jumpGroupId   = random.nextInt(6);
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(healthForGroup(random, this.healthGroupId));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speedForGroup(random, this.speedGroupId));
+        this.getAttribute(Attributes.JUMP_STRENGTH).setBaseValue(jumpForGroup(random, this.jumpGroupId));
+    }
+
+    public void randomizeAttributesFromParents(RandomSource random, PegasusEntity parent1, PegasusEntity parent2) {
+        this.healthGroupId = Math.min(9, Math.max(0, Math.round((parent1.healthGroupId + parent2.healthGroupId) / 2.0f)));
+        this.speedGroupId  = Math.min(9, Math.max(0, Math.round((parent1.speedGroupId  + parent2.speedGroupId)  / 2.0f)));
+        this.jumpGroupId   = Math.min(9, Math.max(0, Math.round((parent1.jumpGroupId   + parent2.jumpGroupId)   / 2.0f)));
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(healthForGroup(random, this.healthGroupId));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speedForGroup(random, this.speedGroupId));
+        this.getAttribute(Attributes.JUMP_STRENGTH).setBaseValue(jumpForGroup(random, this.jumpGroupId));
     }
 
     // --- Goals ---
@@ -360,9 +454,15 @@ public class PegasusEntity extends AbstractChestedHorse {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new PanicGoal(this, 1.2));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+
+        this.followGoal = new FollowOwnerGoal(this, 1.1, 4.0F, 16.0F);
+        this.sitGoal    = new SitGoal(this);
+        this.goalSelector.addGoal(4, this.followGoal);
+        this.goalSelector.addGoal(4, this.sitGoal);
+
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
@@ -390,7 +490,6 @@ public class PegasusEntity extends AbstractChestedHorse {
             if (!this.isTamed() && this.isVehicle()) {
                 dispatcher.buck();
             } else {
-                dispatcher.rearEntry();
                 dispatcher.rear();
             }
         } else {
@@ -398,7 +497,6 @@ public class PegasusEntity extends AbstractChestedHorse {
             dispatcher.idle();
         }
     }
-
 
     // --- Tick ---
     @Override
@@ -409,7 +507,6 @@ public class PegasusEntity extends AbstractChestedHorse {
         boolean currentlyOnGround = this.onGround();
 
         if (this.isVehicle() && !this.isTamed()) {
-            // Pegaso salvaje montado → iniciar buck si no está ya en animación de doma
             if (!level().isClientSide && tamingState == TamingState.NONE) {
                 tamingState = TamingState.BUCKING;
                 tamingTimer = getBuckDuration();
@@ -419,12 +516,10 @@ public class PegasusEntity extends AbstractChestedHorse {
         } else if (this.isVehicle() && this.isTamed()) {
             Entity rider = this.getPassengers().get(0);
             if (rider instanceof Player player) {
-                // Detectar jump key via player.jumping (evita problema del medidor)
                 jumpKeyHeld = ((com.tobyink.millionhorses.mixin.LivingEntityMixin)(Object) player).isJumping();
                 handleFlight(player);
             }
         } else {
-            // Punto 6: al desmontarse en el aire, caer con gravedad normal
             if (this.isPegasusFlying()) {
                 setPegasusFlying(false);
                 setNoGravity(false);
@@ -436,28 +531,21 @@ public class PegasusEntity extends AbstractChestedHorse {
             }
         }
 
-        // Resetear contador de saltos al tocar el suelo
-        if (currentlyOnGround && !wasOnGround) {
-            jumpCount = 0;
-        }
+        if (currentlyOnGround && !wasOnGround) jumpCount = 0;
         wasOnGround = currentlyOnGround;
 
         if (level().isClientSide) return;
-        // Solo bloquear el tick normal si está en rear IDLE (no durante doma)
         if (isRearing && tamingState == TamingState.NONE) return;
 
         // --- Taming animation cycle ---
         if (tamingState != TamingState.NONE) {
             tamingTimer--;
             if (tamingState == TamingState.BUCKING) {
-                // Redispatch buck cada tick — igual que walk/run/idle
-                // para asegurar que el cliente siempre reciba la animación
                 dispatcher.buck();
                 if (tamingTimer <= 0) {
                     this.ejectPassengers();
                     tamingState = TamingState.REARING;
                     tamingTimer = REAR_DURATION_TAMING;
-                    dispatcher.rearEntry();
                     dispatcher.rear();
                     this.playSound(SoundEvents.HORSE_ANGRY, 1.0F, 1.0F);
                 }
@@ -469,24 +557,21 @@ public class PegasusEntity extends AbstractChestedHorse {
             }
         }
 
-        // Punto 5: detectar precipicio en servidor usando diferencia de posición Y
+        // Detectar precipicio
         if (this.isVehicle() && this.isTamed() && !isPegasusFlying()) {
             double deltaY = this.getY() - prevY;
             if (!onGround() && deltaY < -0.1) {
                 boolean isCliff = true;
                 for (int i = 1; i <= CLIFF_MIN_BLOCKS; i++) {
                     BlockPos below = blockPosition().below(i);
-                    if (!level().isEmptyBlock(below)) {
-                        isCliff = false;
-                        break;
-                    }
+                    if (!level().isEmptyBlock(below)) { isCliff = false; break; }
                 }
                 if (isCliff) activateFlight();
             }
         }
         prevY = this.getY();
 
-        // Animación babyBorn al nacer (una sola vez) + pose baby en loop
+        // Animación baby
         if (this.isBaby()) {
             wasBaby = true;
             if (!babyBornPlayed) {
@@ -495,21 +580,18 @@ public class PegasusEntity extends AbstractChestedHorse {
             }
             dispatcher.babyPose();
         }
-
-        // Transición bebé → adulto
         if (wasBaby && !this.isBaby()) {
             wasBaby = false;
             baseAnim = null;
             dispatcher.idle();
         }
 
-        // Durante la doma, no cambiar la animación base (buck/rear la manejan ellos)
         if (tamingState != TamingState.NONE) {
-            // Solo actualizar prevY para detección de precipicio
             prevY = this.getY();
             return;
         }
 
+        // --- Animación base ---
         BaseAnim next;
         if (isPegasusFlying()) {
             next = BaseAnim.FLY;
@@ -535,11 +617,23 @@ public class PegasusEntity extends AbstractChestedHorse {
             }
         }
 
+        // Modo SITTING: forzar IDLE y dejar al idleController hacer sus animaciones normales
+        // El SitGoal ya bloquea el movimiento físico, aquí solo manejamos la animación
+        if (movementMode == MovementMode.SITTING && !this.isVehicle()) {
+            if (baseAnim != BaseAnim.IDLE) {
+                baseAnim = BaseAnim.IDLE;
+                idleController.onStartMoving();
+                dispatcher.idle();
+            }
+            idleController.tick();
+            return;
+        }
+
         if (next != baseAnim) {
             if (next != BaseAnim.IDLE) idleController.onStartMoving();
             baseAnim = next;
             switch (baseAnim) {
-                case FLY  -> { System.out.println("[Pegasus] dispatching fly anim"); dispatcher.fly(); }
+                case FLY  -> dispatcher.fly();
                 case RUN  -> dispatcher.run();
                 case WALK -> dispatcher.walk();
                 case IDLE -> dispatcher.idle();
@@ -557,45 +651,33 @@ public class PegasusEntity extends AbstractChestedHorse {
         if (!isPegasusFlying()) {
             jumpCount++;
             if (jumpCount == 1) {
-                // Primer salto: salto normal, solo animación
                 dispatcher.jump();
             } else if (jumpCount >= 2) {
-                // Doble salto: entrar en modo vuelo
                 activateFlight();
             }
         }
-        // Si ya está volando, handleStartJump no hace nada — el vuelo se controla via player.jumping en tick
     }
 
     @Override
-    public void handleStopJump() {
-        // No usamos esto para el vuelo, usamos player.jumping en tick
-    }
+    public void handleStopJump() {}
 
     private void activateFlight() {
         setPegasusFlying(true);
         setNoGravity(true);
-        baseAnim = null; // forzar re-evaluación en el tick
+        baseAnim = null;
         setDeltaMovement(getDeltaMovement().x, FLY_ASCEND_SPEED * 1.5, getDeltaMovement().z);
     }
 
     private void handleFlight(Player player) {
         if (!isPegasusFlying()) return;
-
         setNoGravity(true);
-
-        // Punto 3: subir si jump mantenido, bajar si no — via player.jumping
         double newY = jumpKeyHeld ? FLY_ASCEND_SPEED : FLY_DESCEND_SPEED;
-
         float yRot = player.getYRot();
         double dx = -Math.sin(Math.toRadians(yRot)) * FLY_FORWARD_SPEED * player.zza;
         double dz =  Math.cos(Math.toRadians(yRot)) * FLY_FORWARD_SPEED * player.zza;
-
         setDeltaMovement(dx, newY, dz);
         setYRot(player.getYRot());
         this.yRotO = getYRot();
-
-        // Aterrizar
         if (onGround() && newY <= 0) {
             setPegasusFlying(false);
             setNoGravity(false);
@@ -604,13 +686,20 @@ public class PegasusEntity extends AbstractChestedHorse {
     }
 
     @Override
-    public boolean isSaddleable() {
-        return !this.isBaby() && super.isSaddleable();
-    }
+    public boolean isSaddleable() { return !this.isBaby() && super.isSaddleable(); }
 
     @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
         return false;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.isVehicle() && !this.getPassengers().isEmpty()) {
+            Entity rider = this.getPassengers().get(0);
+            if (rider instanceof Player) return false;
+        }
+        return super.hurt(source, amount);
     }
 
     @Override
@@ -626,14 +715,11 @@ public class PegasusEntity extends AbstractChestedHorse {
     public void aiStep() { super.aiStep(); }
 
     // --- Interacción ---
-    // Ticks de crecimiento que reduce cada comida (igual que vanilla AbstractHorse)
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (level().isClientSide) return InteractionResult.SUCCESS;
 
-        // Tijeras: solo quitar cofre
         if (stack.is(net.minecraft.world.item.Items.SHEARS)) {
-            // Quitar cofre
             if (this.hasChest()) {
                 for (int i = 3; i < this.getHorseInventory().getContainerSize(); i++) {
                     ItemStack chestItem = this.getHorseInventory().getItem(i);
@@ -656,7 +742,6 @@ public class PegasusEntity extends AbstractChestedHorse {
                 || player.getUUID().equals(this.getOwnerUUID());
 
         if (isOwner) {
-            // Poner carpet con click derecho
             if (com.tobyink.millionhorses.entity.client.renderer.layer.PegasusCarpetLayer.isCarpet(stack)
                     && this.getCarpetItem().isEmpty()) {
                 ItemStack carpet = stack.copy();
@@ -666,8 +751,6 @@ public class PegasusEntity extends AbstractChestedHorse {
                 this.playSound(net.minecraft.sounds.SoundEvents.LLAMA_SWAG, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS;
             }
-            // breeding y curación los maneja super.mobInteract
-            // Poner cofre
             if (stack.is(net.minecraft.world.level.block.Blocks.CHEST.asItem()) && !this.hasChest()) {
                 if (!player.getAbilities().instabuild) stack.shrink(1);
                 this.setChest(true);
@@ -683,7 +766,6 @@ public class PegasusEntity extends AbstractChestedHorse {
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
         if (id == 7) {
-            // Domado exitosamente — limpiar estado de doma
             tamingState = TamingState.NONE;
             tamingTimer = 0;
             dispatcher.idle();
@@ -725,5 +807,98 @@ public class PegasusEntity extends AbstractChestedHorse {
     }
     @Override public Vec3 getLeashOffset() {
         return new Vec3(0.0, 0.8f * this.getEyeHeight(), this.getBbWidth() * 0.4f);
+    }
+
+    // -------------------------------------------------------------------------
+    // Goal: seguir al dueño (modo FOLLOWING)
+    // -------------------------------------------------------------------------
+    static class FollowOwnerGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        private final PegasusEntity pegasus;
+        private final double speedModifier;
+        private final float stopDistance;
+        private final float startDistance;
+        private Player owner;
+        private int timeToRecalcPath;
+
+        FollowOwnerGoal(PegasusEntity pegasus, double speed, float stopDist, float startDist) {
+            this.pegasus       = pegasus;
+            this.speedModifier = speed;
+            this.stopDistance  = stopDist;
+            this.startDistance = startDist;
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (pegasus.getMovementMode() != MovementMode.FOLLOWING) return false;
+            if (!pegasus.isTamed()) return false;
+            if (pegasus.getOwnerUUID() == null) return false;
+            net.minecraft.world.entity.LivingEntity le = pegasus.getOwner();
+            if (!(le instanceof Player p)) return false;
+            owner = p;
+            return pegasus.distanceToSqr(owner) > (double)(startDistance * startDistance);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (pegasus.getMovementMode() != MovementMode.FOLLOWING) return false;
+            if (owner == null || !owner.isAlive()) return false;
+            return pegasus.distanceToSqr(owner) > (double)(stopDistance * stopDistance);
+        }
+
+        @Override public void start() { timeToRecalcPath = 0; }
+
+        @Override
+        public void stop() {
+            owner = null;
+            pegasus.getNavigation().stop();
+        }
+
+        @Override
+        public void tick() {
+            if (owner == null) return;
+            pegasus.getLookControl().setLookAt(owner, 10.0F, pegasus.getMaxHeadXRot());
+            if (--timeToRecalcPath <= 0) {
+                timeToRecalcPath = 10;
+                if (!pegasus.isLeashed()) {
+                    pegasus.getNavigation().moveTo(owner, speedModifier);
+                }
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Goal: quedarse quieto con idle (modo SITTING)
+    // Bloquea MOVE y JUMP para que el pegaso no se mueva por sus propios goals
+    // -------------------------------------------------------------------------
+    static class SitGoal extends net.minecraft.world.entity.ai.goal.Goal {
+        private final PegasusEntity pegasus;
+
+        SitGoal(PegasusEntity pegasus) {
+            this.pegasus = pegasus;
+            this.setFlags(java.util.EnumSet.of(Flag.MOVE, Flag.JUMP));
+        }
+
+        @Override
+        public boolean canUse() {
+            return pegasus.isTamed()
+                    && pegasus.getMovementMode() == MovementMode.SITTING
+                    && !pegasus.isVehicle()
+                    && pegasus.onGround();
+        }
+
+        @Override
+        public boolean canContinueToUse() { return canUse(); }
+
+        @Override
+        public void start() {
+            pegasus.getNavigation().stop();
+            pegasus.setDeltaMovement(0, pegasus.getDeltaMovement().y, 0);
+        }
+
+        @Override
+        public void tick() {
+            pegasus.getNavigation().stop();
+        }
     }
 }

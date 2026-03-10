@@ -59,7 +59,7 @@ public class mHorsesMenu extends AbstractContainerMenu {
         // No usar found.hasChest() porque puede estar desincronizado en el cliente.
         // El servidor ya calculó el tamaño correcto y lo envió en el buffer.
         if (found != null) {
-            // Tenemos la entidad — usar su container real para que los items se vean
+            // Tenemos la entidad — usar su container real para que los item se vean
             // pero solo si el tamaño coincide con lo que dijo el servidor
             SimpleContainer real = found.getHorseInventory();
             int expectedSize = 3 + (chest ? 15 : 0);
