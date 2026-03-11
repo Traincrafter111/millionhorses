@@ -2,7 +2,7 @@ package com.tobyink.millionhorses.entity.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tobyink.millionhorses.entity.menu.mHorsesMenu;
-import com.tobyink.millionhorses.entity.mobs.PegasusEntity;
+import com.tobyink.millionhorses.entity.mobs.AbstractMillionHorseEntity;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -50,7 +50,7 @@ public class mHorsesScreen extends AbstractContainerScreen<mHorsesMenu> {
         graphics.blit(GUI_TEXTURE, x, y, 0, 0, GUI_W, GUI_H);
 
         // ── Slots del cofre: blit bloque grilla desde UV (0, 166) ────────
-        PegasusEntity pegasus = this.menu.getPegasus();
+        AbstractMillionHorseEntity pegasus = this.menu.getPegasus();
         if (pegasus != null && pegasus.hasChest()) {
             graphics.blit(GUI_TEXTURE, x + 79, y + 17, 0, 166, 90, 54);
         }

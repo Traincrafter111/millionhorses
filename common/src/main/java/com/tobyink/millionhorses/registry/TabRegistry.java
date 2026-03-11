@@ -21,6 +21,8 @@ public class TabRegistry {
                             .icon(() -> new ItemStack(ItemRegistry.PEGASUS_SPAWN_EGG.get()))
                             .displayItems((params, output) -> {
                                 output.accept(ItemRegistry.PEGASUS_SPAWN_EGG.get());
+                                output.accept(ItemRegistry.ALICORN_SPAWN_EGG.get());
+                                output.accept(ItemRegistry.CYN_HORSE_SPAWN_EGG.get());
                                 output.accept(ItemRegistry.HORSE_WHISTLE.get());
                             })
                             .build()

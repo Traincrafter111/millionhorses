@@ -1,7 +1,11 @@
 {
   "itemGroup.millionhorses.million_horses_tab": "1 Million Horses",
   "entity.millionhorses.pegasus": "Pegasus",
+  "entity.millionhorses.alicorn": "Alicorn",
+  "entity.millionhorses.cyn_horse": "Horse",
   "item.millionhorses.pegasus_spawn_egg": "Pegasus Spawn Egg",
+  "item.millionhorses.alicorn_spawn_egg": "Alicorn Spawn Egg",
+  "item.millionhorses.cyn_horse_spawn_egg": "Horse Spawn Egg",
   "item.millionhorses.horse_whistle": "Horse Whistle",
 
   "item.millionhorses.horse_whistle.mode.wandering": "§7Mode: §fWander",

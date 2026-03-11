@@ -1,5 +1,7 @@
 package com.tobyink.millionhorses;
 
+import com.tobyink.millionhorses.config.ModConfig;
+import com.tobyink.millionhorses.event.VanillaHorseSpawnHandler;
 import net.minecraft.resources.ResourceLocation;
 import com.tobyink.millionhorses.registry.EntityRegistry;
 import com.tobyink.millionhorses.registry.ItemRegistry;
@@ -8,23 +10,29 @@ import com.tobyink.millionhorses.registry.TabRegistry;
 import com.tobyink.millionhorses.entity.client.renderer.PegasusRenderer;
 import com.tobyink.millionhorses.entity.client.screen.mHorsesScreen;
 import com.tobyink.millionhorses.entity.mobs.PegasusEntity;
+import com.tobyink.millionhorses.entity.mobs.CynHorseEntity;
 import dev.architectury.event.events.common.TickEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.biome.Biomes;
 
 public final class MillionHorsesMod {
     public static final String MOD_ID = "millionhorses";
 
     public static void init() {
+        ModConfig.load();
         EntityRegistry.init();
         ItemRegistry.init();
         SoundRegistry.init();
         TabRegistry.init();
         com.tobyink.millionhorses.registry.MenuRegistry.init();
         registerPegasusSpawner();
+        registerCynHorseSpawner();
+        VanillaHorseSpawnHandler.register();
     }
 
     // Cada cuantos ticks intentar spawn (200 = 10 segundos)
@@ -64,6 +72,67 @@ public final class MillionHorsesMod {
                             break;
                         }
                     }
+                }
+            });
+        });
+    }
+
+    // CynHorse: spawnea en grupos de 2-4 sobre grass_block, luz de bloque ≥7
+    private static void registerCynHorseSpawner() {
+        TickEvent.SERVER_LEVEL_POST.register(level -> {
+            if (level.getGameTime() % SPAWN_INTERVAL != 0) return;
+
+            level.players().forEach(player -> {
+                // No spawnear demasiados cerca del jugador
+                long nearby = level.getEntitiesOfClass(CynHorseEntity.class,
+                        player.getBoundingBox().inflate(128)).size();
+                if (nearby >= 8) return;
+
+                BlockPos playerPos = player.blockPosition();
+                int range = 64;
+
+                for (int attempts = 0; attempts < 12; attempts++) {
+                    int dx = level.random.nextInt(range * 2) - range;
+                    int dz = level.random.nextInt(range * 2) - range;
+                    int worldX = playerPos.getX() + dx;
+                    int worldZ = playerPos.getZ() + dz;
+
+                    // Y = superficie sólida
+                    int worldY = level.getHeight(
+                            net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                            worldX, worldZ);
+                    BlockPos ground = new BlockPos(worldX, worldY - 1, worldZ);
+                    BlockPos spawnPos = ground.above(); // posición donde va a estar de pie
+
+                    if (!level.getBlockState(ground).is(Blocks.GRASS_BLOCK)) continue;
+                    if (!level.getBlockState(spawnPos).isAir()) continue;
+                    // Luz de bloque (no sky) ≥ 7 para evitar cuevas
+                    if (level.getBrightness(net.minecraft.world.level.LightLayer.BLOCK, spawnPos) < 7
+                            && level.getBrightness(net.minecraft.world.level.LightLayer.SKY, spawnPos) < 7) continue;
+
+                    // Spawn grupo 2-4
+                    int herdSize = 2 + level.random.nextInt(3);
+                    for (int h = 0; h < herdSize; h++) {
+                        int hx = worldX + level.random.nextInt(7) - 3;
+                        int hz = worldZ + level.random.nextInt(7) - 3;
+                        int hy = level.getHeight(
+                                net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                                hx, hz);
+                        BlockPos hGround = new BlockPos(hx, hy - 1, hz);
+                        BlockPos hPos   = hGround.above();
+
+                        if (!level.getBlockState(hGround).is(Blocks.GRASS_BLOCK)) continue;
+                        if (!level.getBlockState(hPos).isAir()) continue;
+
+                        CynHorseEntity horse = EntityRegistry.CYN_HORSE.get().create(level);
+                        if (horse == null) continue;
+                        horse.moveTo(hx + 0.5, hy, hz + 0.5,
+                                level.random.nextFloat() * 360, 0);
+                        horse.finalizeSpawn(level, level.getCurrentDifficultyAt(hPos),
+                                MobSpawnType.NATURAL, null, null);
+                        level.addFreshEntity(horse);
+                    }
+                    break; // un grupo por jugador por intervalo
                 }
             });
         });

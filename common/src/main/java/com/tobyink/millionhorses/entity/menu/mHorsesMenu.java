@@ -1,7 +1,7 @@
 package com.tobyink.millionhorses.entity.menu;
 
-import com.tobyink.millionhorses.entity.client.renderer.layer.PegasusCarpetLayer;
-import com.tobyink.millionhorses.entity.mobs.PegasusEntity;
+import com.tobyink.millionhorses.entity.client.renderer.layer.HorseCarpetLayer;
+import com.tobyink.millionhorses.entity.mobs.AbstractMillionHorseEntity;
 import com.tobyink.millionhorses.registry.MenuRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -17,7 +17,7 @@ import net.minecraft.world.item.Items;
 public class mHorsesMenu extends AbstractContainerMenu {
 
     private final Container horseContainer;
-    private final PegasusEntity pegasus;
+    private final AbstractMillionHorseEntity pegasus;
 
     // Coordenadas basadas en medición exacta de horse_gui.png (256x256):
     //
@@ -36,7 +36,7 @@ public class mHorsesMenu extends AbstractContainerMenu {
     //   Hotbar:  x=8+col*18, y=142
 
     public mHorsesMenu(int containerId, Inventory playerInventory,
-                       Container horseContainer, PegasusEntity pegasus) {
+                       Container horseContainer, AbstractMillionHorseEntity pegasus) {
         super(MenuRegistry.PEGASUS_MENU.get(), containerId);
         this.horseContainer = horseContainer;
         this.pegasus = pegasus;
@@ -52,14 +52,14 @@ public class mHorsesMenu extends AbstractContainerMenu {
 
         net.minecraft.world.entity.Entity e =
                 playerInventory.player.level().getEntity(entityId);
-        PegasusEntity found = e instanceof PegasusEntity pe ? pe : null;
+        AbstractMillionHorseEntity found = e instanceof AbstractMillionHorseEntity h ? h : null;
         this.pegasus = found;
 
         // IMPORTANTE: el tamaño del container SIEMPRE viene del buffer (chest).
         // No usar found.hasChest() porque puede estar desincronizado en el cliente.
         // El servidor ya calculó el tamaño correcto y lo envió en el buffer.
         if (found != null) {
-            // Tenemos la entidad — usar su container real para que los item se vean
+            // Tenemos la entidad — usar su container real para que los items se vean
             // pero solo si el tamaño coincide con lo que dijo el servidor
             SimpleContainer real = found.getHorseInventory();
             int expectedSize = 3 + (chest ? 15 : 0);
@@ -88,7 +88,7 @@ public class mHorsesMenu extends AbstractContainerMenu {
             @Override public int getMaxStackSize() { return 1; }
         });
         this.addSlot(new Slot(horseContainer, 2, 8, 54) {
-            @Override public boolean mayPlace(ItemStack s) { return PegasusCarpetLayer.isCarpet(s); }
+            @Override public boolean mayPlace(ItemStack s) { return HorseCarpetLayer.isCarpet(s); }
             @Override public int getMaxStackSize() { return 1; }
         });
 
@@ -156,7 +156,7 @@ public class mHorsesMenu extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(stack, 0, 1, false)) return ItemStack.EMPTY;
             } else if (stack.getItem() instanceof HorseArmorItem) {
                 if (!this.moveItemStackTo(stack, 1, 2, false)) return ItemStack.EMPTY;
-            } else if (PegasusCarpetLayer.isCarpet(stack)) {
+            } else if (HorseCarpetLayer.isCarpet(stack)) {
                 if (!this.moveItemStackTo(stack, 2, 3, false)) return ItemStack.EMPTY;
             } else if (horseSlots > 3) {
                 if (!this.moveItemStackTo(stack, 3, horseSlots, false)) return ItemStack.EMPTY;
@@ -176,5 +176,5 @@ public class mHorsesMenu extends AbstractContainerMenu {
         horseContainer.stopOpen(player);
     }
 
-    public PegasusEntity getPegasus() { return pegasus; }
+    public AbstractMillionHorseEntity getPegasus() { return pegasus; }
 }

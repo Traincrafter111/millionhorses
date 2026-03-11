@@ -3,10 +3,12 @@ package com.tobyink.millionhorses.entity.client.renderer;
 import com.google.common.collect.Maps;
 import com.tobyink.millionhorses.MillionHorsesMod;
 import com.tobyink.millionhorses.entity.client.animator.PegasusAnimator;
-import com.tobyink.millionhorses.entity.client.renderer.layer.PegasusEquipmentLayer;
-import com.tobyink.millionhorses.entity.client.renderer.layer.PegasusCarpetLayer;
+
+
 import com.tobyink.millionhorses.entity.mobs.PegasusEntity;
 import com.tobyink.millionhorses.entity.variant.PegasusVariant;
+import com.tobyink.millionhorses.entity.client.renderer.layer.HorseEquipmentLayer;
+import com.tobyink.millionhorses.entity.client.renderer.layer.HorseCarpetLayer;
 import mod.azure.azurelib.render.entity.AzEntityRenderer;
 import mod.azure.azurelib.render.entity.AzEntityRendererConfig;
 import net.minecraft.Util;
@@ -43,8 +45,8 @@ public class PegasusRenderer extends AzEntityRenderer<PegasusEntity> {
                                 entity -> LOCATION_BY_VARIANT.getOrDefault(
                                         entity.getPegasusVariant(), DEFAULT_TEXTURE))
                         .setAnimatorProvider(PegasusAnimator::new)
-                        .addRenderLayer(new PegasusEquipmentLayer())
-                        .addRenderLayer(new PegasusCarpetLayer())
+                        .addRenderLayer(new HorseEquipmentLayer<>())
+                        .addRenderLayer(new HorseCarpetLayer<>())
                         .setShadowRadius(0.85F)
                         .setRenderType(entity -> RenderType.entityCutoutNoCull(
                                 LOCATION_BY_VARIANT.getOrDefault(entity.getPegasusVariant(), DEFAULT_TEXTURE)))

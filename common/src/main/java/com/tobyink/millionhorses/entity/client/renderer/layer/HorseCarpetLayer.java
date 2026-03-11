@@ -1,7 +1,7 @@
 package com.tobyink.millionhorses.entity.client.renderer.layer;
 
 import com.tobyink.millionhorses.MillionHorsesMod;
-import com.tobyink.millionhorses.entity.mobs.PegasusEntity;
+import com.tobyink.millionhorses.entity.mobs.AbstractMillionHorseEntity;
 import mod.azure.azurelib.model.AzBakedModel;
 import mod.azure.azurelib.model.AzBone;
 import mod.azure.azurelib.render.AzRendererPipelineContext;
@@ -13,10 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
-public class PegasusCarpetLayer implements AzRenderLayer<UUID, PegasusEntity> {
+public class HorseCarpetLayer<T extends AbstractMillionHorseEntity> implements AzRenderLayer<UUID, T> {
 
     private static final Map<Item, ResourceLocation> CARPET_TEXTURES = Map.ofEntries(
             Map.entry(Items.BLACK_CARPET,      MillionHorsesMod.modResource("textures/entity/carpets/carpet_black.png")),
@@ -36,7 +35,6 @@ public class PegasusCarpetLayer implements AzRenderLayer<UUID, PegasusEntity> {
             Map.entry(Items.RED_CARPET,        MillionHorsesMod.modResource("textures/entity/carpets/carpet_red.png")),
             Map.entry(Items.WHITE_CARPET,      MillionHorsesMod.modResource("textures/entity/carpets/carpet_white.png")),
             Map.entry(Items.YELLOW_CARPET,     MillionHorsesMod.modResource("textures/entity/carpets/carpet_yellow.png"))
-            // carpet_moss_pale: se añadirá cuando exista el item correspondiente
     );
 
     public static boolean isCarpet(ItemStack stack) {
@@ -44,11 +42,11 @@ public class PegasusCarpetLayer implements AzRenderLayer<UUID, PegasusEntity> {
     }
 
     @Override
-    public void preRender(AzRendererPipelineContext<UUID, PegasusEntity> context) {}
+    public void preRender(AzRendererPipelineContext<UUID, T> context) {}
 
     @Override
-    public void render(AzRendererPipelineContext<UUID, PegasusEntity> context) {
-        PegasusEntity entity = context.animatable();
+    public void render(AzRendererPipelineContext<UUID, T> context) {
+        T entity = context.animatable();
         ItemStack carpetStack = entity.getCarpetItem();
         if (carpetStack.isEmpty()) return;
 
@@ -60,21 +58,17 @@ public class PegasusCarpetLayer implements AzRenderLayer<UUID, PegasusEntity> {
 
         RenderType renderType = RenderType.entityCutoutNoCull(texture);
 
-
-        // reRender con textura de alfombra
-        var prevRenderType    = context.renderType();
+        var prevRenderType     = context.renderType();
         var prevVertexConsumer = context.vertexConsumer();
 
         context.setRenderType(renderType);
         context.setVertexConsumer(context.multiBufferSource().getBuffer(renderType));
         context.rendererPipeline().reRender(context);
 
-        // Restaurar
         context.setRenderType(prevRenderType);
         context.setVertexConsumer(prevVertexConsumer);
-
     }
 
     @Override
-    public void renderForBone(AzRendererPipelineContext<UUID, PegasusEntity> context, AzBone bone) {}
+    public void renderForBone(AzRendererPipelineContext<UUID, T> context, AzBone bone) {}
 }

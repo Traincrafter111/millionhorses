@@ -2,8 +2,7 @@ package com.tobyink.millionhorses.entity.client.renderer.layer;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.tobyink.millionhorses.MillionHorsesMod;
-import com.tobyink.millionhorses.entity.mobs.PegasusEntity;
-import com.tobyink.millionhorses.entity.variant.PegasusVariant;
+import com.tobyink.millionhorses.entity.mobs.AbstractMillionHorseEntity;
 import mod.azure.azurelib.model.AzBakedModel;
 import mod.azure.azurelib.model.AzBone;
 import mod.azure.azurelib.render.AzRendererPipelineContext;
@@ -22,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class PegasusEquipmentLayer implements AzRenderLayer<UUID, PegasusEntity> {
+public class HorseEquipmentLayer<T extends AbstractMillionHorseEntity> implements AzRenderLayer<UUID, T> {
 
     private static final Set<String> DECORATIVE_BONES = Set.of(
             "wingL","wingL2","wingL3","wingL4",
@@ -101,8 +100,8 @@ public class PegasusEquipmentLayer implements AzRenderLayer<UUID, PegasusEntity>
     }
 
     @Override
-    public void preRender(AzRendererPipelineContext<UUID, PegasusEntity> context) {
-        PegasusEntity entity = context.animatable();
+    public void preRender(AzRendererPipelineContext<UUID, T> context) {
+        T entity = context.animatable();
         AzBakedModel model = context.bakedModel();
         if (model == null) return;
 
@@ -113,9 +112,9 @@ public class PegasusEquipmentLayer implements AzRenderLayer<UUID, PegasusEntity>
     }
 
     @Override
-    public void render(AzRendererPipelineContext<UUID, PegasusEntity> context) {
-        PegasusEntity entity = context.animatable();
-        ItemStack stack = entity.getArmor();
+    public void render(AzRendererPipelineContext<UUID, T> context) {
+        T entity = context.animatable();
+        ItemStack stack = entity.getArmorItem();
         if (stack.isEmpty() || !(stack.getItem() instanceof HorseArmorItem armorItem)) return;
 
         AzBakedModel model = context.bakedModel();
@@ -157,7 +156,7 @@ public class PegasusEquipmentLayer implements AzRenderLayer<UUID, PegasusEntity>
     }
 
     @Override
-    public void renderForBone(AzRendererPipelineContext<UUID, PegasusEntity> context, AzBone bone) {}
+    public void renderForBone(AzRendererPipelineContext<UUID, T> context, AzBone bone) {}
 
     private void setBoneVisible(AzBakedModel model, String name, boolean visible) {
         model.getBone(name).ifPresent(b -> b.setHidden(!visible));

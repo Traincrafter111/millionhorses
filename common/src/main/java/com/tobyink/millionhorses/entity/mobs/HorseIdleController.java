@@ -2,6 +2,8 @@ package com.tobyink.millionhorses.entity.mobs;
 
 import com.tobyink.millionhorses.entity.constant.HorseAnimations;
 
+
+
 public class HorseIdleController {
 
     public enum IdleState {
@@ -25,11 +27,11 @@ public class HorseIdleController {
     private int transitionTimer = 0;
     private boolean inSit       = false;
 
-    private final PegasusEntity pegasus;
+    private final AbstractMillionHorseEntity horse;
     private final HorseAnimations dispatcher;
 
-    public HorseIdleController(PegasusEntity pegasus, HorseAnimations dispatcher) {
-        this.pegasus    = pegasus;
+    public HorseIdleController(AbstractMillionHorseEntity horse, HorseAnimations dispatcher) {
+        this.horse = horse;
         this.dispatcher = dispatcher;
         this.animTimer  = nextAnimInterval();
     }
@@ -147,7 +149,7 @@ public class HorseIdleController {
     }
 
     private void playRandomIdleAnim() {
-        int roll = pegasus.getRandom().nextInt(7);
+        int roll = horse.getRandom().nextInt(7);
         switch (roll) {
             case 0 -> dispatcher.idleTail();
             case 1 -> dispatcher.idleTail2();
@@ -166,7 +168,7 @@ public class HorseIdleController {
     }
 
     private boolean isPlayerNear() {
-        return pegasus.level().getNearestPlayer(pegasus, PLAYER_DETECT_RANGE) != null;
+        return horse.level().getNearestPlayer(horse, PLAYER_DETECT_RANGE) != null;
     }
 
     private void startTransition(int durationTicks) {
@@ -175,6 +177,6 @@ public class HorseIdleController {
 
     private int nextAnimInterval() {
         return IDLE_ANIM_INTERVAL_MIN +
-                pegasus.getRandom().nextInt(IDLE_ANIM_INTERVAL_MAX - IDLE_ANIM_INTERVAL_MIN);
+                horse.getRandom().nextInt(IDLE_ANIM_INTERVAL_MAX - IDLE_ANIM_INTERVAL_MIN);
     }
 }
