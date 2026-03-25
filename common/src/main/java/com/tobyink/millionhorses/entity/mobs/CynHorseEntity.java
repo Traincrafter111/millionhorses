@@ -14,6 +14,11 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.tags.BiomeTags;
 import org.jetbrains.annotations.Nullable;
 
 public class CynHorseEntity extends AbstractMillionHorseEntity {
@@ -81,6 +86,9 @@ public class CynHorseEntity extends AbstractMillionHorseEntity {
     }
 
     // Atributos: usa los valores de AbstractMillionHorseEntity (equivalentes a vanilla)
+
+    @Override
+    public int getChestSize() { return 9; }
 
     @Override
     protected boolean canFly() { return false; }
@@ -203,5 +211,26 @@ public class CynHorseEntity extends AbstractMillionHorseEntity {
         super.dropCustomDeathLoot(source, looting, recentlyHit);
         int leather = this.getRandom().nextInt(3) + looting;
         if (leather > 0) this.spawnAtLocation(new ItemStack(Items.LEATHER, leather));
+    }
+
+    // ── Spawn rules ───────────────────────────────────────────────────────────
+    // Plains y savanna, grass_block, luz ≥ 7
+    // Firma exacta requerida por SpawnPlacements.SpawnPredicate<T>
+    public static boolean checkCynHorseSpawnRules(
+            EntityType<CynHorseEntity> type,
+            ServerLevelAccessor level,
+            MobSpawnType reason,
+            BlockPos pos,
+            RandomSource random) {
+        if (level.getRawBrightness(pos, 0) < 7) return false;
+        if (!level.getBlockState(pos.below()).is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK))
+            return false;
+        var biome = level.getBiome(pos);
+        return biome.is(BiomeTags.IS_OVERWORLD) && (
+                biome.is(net.minecraft.world.level.biome.Biomes.PLAINS)
+                        || biome.is(net.minecraft.world.level.biome.Biomes.SUNFLOWER_PLAINS)
+                        || biome.is(net.minecraft.world.level.biome.Biomes.SAVANNA)
+                        || biome.is(net.minecraft.world.level.biome.Biomes.SAVANNA_PLATEAU)
+                        || biome.is(net.minecraft.world.level.biome.Biomes.WINDSWEPT_SAVANNA));
     }
 }

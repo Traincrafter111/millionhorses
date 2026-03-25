@@ -9,6 +9,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.HorseArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -18,67 +19,50 @@ public class mHorsesMenu extends AbstractContainerMenu {
 
     private final Container horseContainer;
     private final AbstractMillionHorseEntity pegasus;
-
-    // Coordenadas basadas en medición exacta de horse_gui.png (256x256):
-    //
-    // Slots equipo (columna izquierda):
-    //   Silla    slot 0: x=8,  y=18
-    //   Armadura slot 1: x=8,  y=36
-    //   Carpet   slot 2: x=8,  y=54
-    //
-    // Slots cofre (5 col x 3 fil, zona derecha del panel superior):
-    //   Fila 0: x=80+col*18, y=18
-    //   Fila 1: x=80+col*18, y=36
-    //   Fila 2: x=80+col*18, y=54
-    //
-    // Inventario jugador:
-    //   3 filas: x=8+col*18, y=84+row*18
-    //   Hotbar:  x=8+col*18, y=142
+    private final int chestSize;
 
     public mHorsesMenu(int containerId, Inventory playerInventory,
-                       Container horseContainer, AbstractMillionHorseEntity pegasus) {
+                       Container horseContainer, AbstractMillionHorseEntity horse) {
         super(MenuRegistry.PEGASUS_MENU.get(), containerId);
         this.horseContainer = horseContainer;
-        this.pegasus = pegasus;
+        this.pegasus = horse;
+        this.chestSize = horse != null && horse.hasChest() ? horse.getChestSize() : 0;
         horseContainer.startOpen(playerInventory.player);
-        buildSlots(playerInventory, pegasus != null && pegasus.hasChest());
+        buildSlots(playerInventory);
     }
 
-    // Constructor cliente — lee entityId y hasChest del buffer
     public mHorsesMenu(int containerId, Inventory playerInventory, FriendlyByteBuf buf) {
         super(MenuRegistry.PEGASUS_MENU.get(), containerId);
         int entityId  = buf.readInt();
-        boolean chest = buf.readBoolean(); // fuente de verdad para el tamaño
+        boolean chest = buf.readBoolean();
+        int chestSz   = buf.readInt();
 
         net.minecraft.world.entity.Entity e =
                 playerInventory.player.level().getEntity(entityId);
         AbstractMillionHorseEntity found = e instanceof AbstractMillionHorseEntity h ? h : null;
-        this.pegasus = found;
+        this.pegasus   = found;
+        this.chestSize = chest ? chestSz : 0;
 
-        // IMPORTANTE: el tamaño del container SIEMPRE viene del buffer (chest).
-        // No usar found.hasChest() porque puede estar desincronizado en el cliente.
-        // El servidor ya calculó el tamaño correcto y lo envió en el buffer.
+        int expectedSize = 3 + this.chestSize;
         if (found != null) {
-            // Tenemos la entidad — usar su container real para que los items se vean
-            // pero solo si el tamaño coincide con lo que dijo el servidor
             SimpleContainer real = found.getHorseInventory();
-            int expectedSize = 3 + (chest ? 15 : 0);
-            if (real.getContainerSize() == expectedSize) {
-                this.horseContainer = real;
-            } else {
-                // Tamaño no coincide — usar fallback del tamaño correcto
-                this.horseContainer = new SimpleContainer(expectedSize);
-            }
+            this.horseContainer = real.getContainerSize() == expectedSize
+                    ? real : new SimpleContainer(expectedSize);
         } else {
-            this.horseContainer = new SimpleContainer(3 + (chest ? 15 : 0));
+            this.horseContainer = new SimpleContainer(expectedSize);
         }
 
         horseContainer.startOpen(playerInventory.player);
-        buildSlots(playerInventory, chest); // chest del buffer, no de la entidad
+        buildSlots(playerInventory);
     }
 
-    private void buildSlots(Inventory playerInventory, boolean hasChest) {
-        // ── Slots de equipamiento ────────────────────────────────────────
+    public int getChestColumns() {
+        if (chestSize <= 9)  return 3;
+        if (chestSize <= 12) return 4;
+        return 5;
+    }
+
+    private void buildSlots(Inventory playerInventory) {
         this.addSlot(new Slot(horseContainer, 0, 8, 18) {
             @Override public boolean mayPlace(ItemStack s) { return s.is(Items.SADDLE); }
             @Override public int getMaxStackSize() { return 1; }
@@ -92,17 +76,19 @@ public class mHorsesMenu extends AbstractContainerMenu {
             @Override public int getMaxStackSize() { return 1; }
         });
 
-        // ── Slots del cofre: 3 filas × 5 columnas ───────────────────────
-        if (hasChest) {
-            for (int row = 0; row < 3; row++) {
-                for (int col = 0; col < 5; col++) {
-                    this.addSlot(new Slot(horseContainer, 3 + col + row * 5,
+        if (chestSize > 0) {
+            int cols = getChestColumns();
+            int rows = (int) Math.ceil((double) chestSize / cols);
+            for (int row = 0; row < rows; row++) {
+                for (int col = 0; col < cols; col++) {
+                    int slot = 3 + col + row * cols;
+                    if (slot >= 3 + chestSize) break;
+                    this.addSlot(new Slot(horseContainer, slot,
                             80 + col * 18, 18 + row * 18));
                 }
             }
         }
 
-        // ── Inventario del jugador ───────────────────────────────────────
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
                 this.addSlot(new Slot(playerInventory, col + row * 9 + 9,
@@ -115,11 +101,8 @@ public class mHorsesMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slotId, int button, net.minecraft.world.inventory.ClickType clickType,
-                        Player player) {
-        // QUICK_CRAFT: button & 3 da la fase del drag (0=inicio, 1=añadir slot, 2=fin)
-        // Cuando button=2 (fin del drag) con slotId inválido, cancelar para evitar crash
-        if (clickType == net.minecraft.world.inventory.ClickType.QUICK_CRAFT
+    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+        if (clickType == ClickType.QUICK_CRAFT
                 && (button & 3) == 2
                 && (slotId < 0 || slotId >= this.slots.size())) {
             this.resetQuickCraft();
@@ -143,10 +126,9 @@ public class mHorsesMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         result = stack.copy();
 
-        // Usar tamaño real del container (no depender de pegasus != null)
-        int horseSlots = horseContainer.getContainerSize();
+        int horseSlots  = horseContainer.getContainerSize();
         int playerStart = horseSlots;
-        int playerEnd = playerStart + 36;
+        int playerEnd   = playerStart + 36;
 
         if (index < horseSlots) {
             if (!this.moveItemStackTo(stack, playerStart, playerEnd, true))
@@ -177,4 +159,5 @@ public class mHorsesMenu extends AbstractContainerMenu {
     }
 
     public AbstractMillionHorseEntity getPegasus() { return pegasus; }
+    public int getChestSize() { return chestSize; }
 }

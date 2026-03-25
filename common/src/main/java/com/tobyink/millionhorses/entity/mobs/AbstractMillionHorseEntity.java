@@ -97,10 +97,10 @@ public abstract class AbstractMillionHorseEntity extends AbstractChestedHorse {
     // -------------------------------------------------------------------------
     // Flight state
     // -------------------------------------------------------------------------
-    private int     jumpCount   = 0;
-    private boolean wasOnGround = true;
-    private boolean jumpKeyHeld = false;
-    private double  prevY       = 0.0;
+    private int     jumpCount        = 0;
+    private boolean wasOnGround      = true;
+    private boolean jumpKeyHeld      = false;
+    private double  prevY            = 0.0;
 
     public static double FLY_ASCEND_SPEED   = 0.12;
     public static double FLY_DESCEND_SPEED  = -0.06;
@@ -199,15 +199,18 @@ public abstract class AbstractMillionHorseEntity extends AbstractChestedHorse {
         return min + r.nextDouble() * (max - min);
     }
 
-    // Default attribute group formulas — subclasses may override jumpForGroup for higher caps
+    // Default attribute group formulas — subclasses may override for higher caps
     protected double healthForGroup(RandomSource r, int g) {
-        return randomInRange(r, 20.0 + g * 3.0, 23.0 + g * 3.0);
+        // grupo 0 → 15-18, grupo 9 → 42-45 (vanilla horse: 15-30)
+        return randomInRange(r, 15.0 + g * 3.0, 18.0 + g * 3.0);
     }
     protected double speedForGroup(RandomSource r, int g) {
-        return randomInRange(r, 0.230 + g * 0.032, 0.262 + g * 0.032);
+        // grupo 0 → 0.112-0.138, grupo 9 → 0.202-0.228 (vanilla: ~0.113-0.338 * 0.25 factor)
+        return randomInRange(r, 0.112 + g * 0.01, 0.138 + g * 0.01);
     }
     protected double jumpForGroup(RandomSource r, int g) {
-        return randomInRange(r, 0.70 + g * 0.04, 0.74 + g * 0.04);
+        // grupo 0 → 0.40-0.46, grupo 9 → 0.76-0.82
+        return randomInRange(r, 0.40 + g * 0.04, 0.46 + g * 0.04);
     }
 
     public static AttributeSupplier.Builder createBaseMillionHorseAttributes() {
@@ -254,11 +257,14 @@ public abstract class AbstractMillionHorseEntity extends AbstractChestedHorse {
     @Override
     public int getInventoryColumns() { return 5; }
 
+    /** Subclasses override to change chest inventory size. Default: 15 (vanilla). */
+    public int getChestSize() { return 15; }
+
     @Override
     public void createInventory() {
         SimpleContainer old = this.inventory;
         boolean chest = this.entityData != null && this.hasChest();
-        int size = 3 + (chest ? 15 : 0);
+        int size = 3 + (chest ? getChestSize() : 0);
         this.inventory = new SimpleContainer(size) {
             @Override public void setChanged() {
                 super.setChanged();
@@ -445,7 +451,36 @@ public abstract class AbstractMillionHorseEntity extends AbstractChestedHorse {
         this.goalSelector.addGoal(0, new RunAroundLikeCrazyGoal(this, 1.2));
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new PanicGoal(this, 1.2));
-        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0));
+        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0) {
+            // Override para buscar cualquier AbstractMillionHorseEntity, no solo la misma clase
+            @Override
+            protected void breed() {
+                if (animal instanceof AbstractMillionHorseEntity horse
+                        && partner instanceof AbstractMillionHorseEntity horseMate) {
+                    horse.spawnChildFromBreeding((net.minecraft.server.level.ServerLevel) animal.level(), horseMate);
+                    horse.setAge(6000);
+                    horseMate.setAge(6000);
+                    horse.resetLove();
+                    horseMate.resetLove();
+                } else {
+                    super.breed();
+                }
+            }
+
+            @Override
+            public boolean canUse() {
+                if (!animal.isInLove()) return false;
+                // Buscar pareja entre todos los AbstractMillionHorseEntity cercanos
+                partner = animal.level().getEntitiesOfClass(
+                                AbstractMillionHorseEntity.class,
+                                animal.getBoundingBox().inflate(8.0))
+                        .stream()
+                        .filter(e -> e != animal && e.isInLove() && animal.canMate(e))
+                        .findFirst()
+                        .orElse(null);
+                return partner != null;
+            }
+        });
 
         this.followGoal = new FollowOwnerGoal(this, 1.1, 4.0F, 16.0F);
         this.sitGoal    = new SitGoal(this);
@@ -518,19 +553,31 @@ public abstract class AbstractMillionHorseEntity extends AbstractChestedHorse {
 
         // Taming animation cycle
         if (tamingState != TamingState.NONE) {
-            tamingTimer--;
-            if (tamingState == TamingState.BUCKING) {
-                dispatcher.buck();
-                if (tamingTimer <= 0) {
-                    this.ejectPassengers();
-                    tamingState = TamingState.REARING;
-                    tamingTimer = REAR_DURATION_TAMING;
-                    dispatcher.rear();
-                    this.playSound(SoundEvents.HORSE_ANGRY, 1.0F, 1.0F);
-                }
-            } else if (tamingState == TamingState.REARING && tamingTimer <= 0) {
+            // Si ya fue domado durante cualquier fase, cancelar limpiamente
+            if (this.isTamed()) {
                 tamingState = TamingState.NONE;
                 dispatcher.idle();
+            } else {
+                tamingTimer--;
+                if (tamingState == TamingState.BUCKING) {
+                    dispatcher.buck();
+                    if (tamingTimer <= 0) {
+                        // Solo rear+eject si sigue sin domar
+                        if (!this.isTamed()) {
+                            this.ejectPassengers();
+                            tamingState = TamingState.REARING;
+                            tamingTimer = REAR_DURATION_TAMING;
+                            dispatcher.rear();
+                            this.playSound(SoundEvents.HORSE_ANGRY, 1.0F, 1.0F);
+                        } else {
+                            tamingState = TamingState.NONE;
+                            dispatcher.idle();
+                        }
+                    }
+                } else if (tamingState == TamingState.REARING && tamingTimer <= 0) {
+                    tamingState = TamingState.NONE;
+                    dispatcher.idle();
+                }
             }
         }
 
@@ -556,7 +603,9 @@ public abstract class AbstractMillionHorseEntity extends AbstractChestedHorse {
         if (wasBaby && !this.isBaby()) {
             wasBaby = false;
             baseAnim = null;
+            dispatcher.stopBaby();
             dispatcher.idle();
+            this.refreshDimensions();
         }
 
         if (tamingState != TamingState.NONE) { prevY = this.getY(); return; }
@@ -767,6 +816,7 @@ public abstract class AbstractMillionHorseEntity extends AbstractChestedHorse {
                     buf -> {
                         buf.writeInt(AbstractMillionHorseEntity.this.getId());
                         buf.writeBoolean(AbstractMillionHorseEntity.this.hasChest());
+                        buf.writeInt(AbstractMillionHorseEntity.this.getChestSize());
                     }
             );
         }
@@ -774,22 +824,6 @@ public abstract class AbstractMillionHorseEntity extends AbstractChestedHorse {
 
     // =========================================================================
     // Sounds
-    @Override
-    public void positionRider(Entity passenger, MoveFunction callback) {
-        if (!this.hasPassenger(passenger)) return;
-
-        // Posición horizontal: igual que vanilla (ligeramente al frente del centro)
-        double offsetX = Math.sin(this.yBodyRot * (Math.PI / 180.0)) * 0.2;
-        double offsetZ = -Math.cos(this.yBodyRot * (Math.PI / 180.0)) * 0.2;
-
-        // Posición vertical: siempre sincronizada con el caballo, incluyendo vuelo y saltos
-        double riderY = this.getY() + this.getPassengersRidingOffset() + passenger.getMyRidingOffset();
-
-        callback.accept(passenger,
-                this.getX() + offsetX,
-                riderY,
-                this.getZ() + offsetZ);
-    }
 
 
     // =========================================================================

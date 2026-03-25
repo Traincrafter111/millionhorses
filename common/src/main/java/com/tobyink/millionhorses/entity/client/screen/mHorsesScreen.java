@@ -49,10 +49,14 @@ public class mHorsesScreen extends AbstractContainerScreen<mHorsesMenu> {
         // ── Fondo principal 176x166 ──────────────────────────────────────
         graphics.blit(GUI_TEXTURE, x, y, 0, 0, GUI_W, GUI_H);
 
-        // ── Slots del cofre: blit bloque grilla desde UV (0, 166) ────────
         AbstractMillionHorseEntity pegasus = this.menu.getPegasus();
+
+        // ── Slots del cofre: blit grilla según columnas reales ───────────
         if (pegasus != null && pegasus.hasChest()) {
-            graphics.blit(GUI_TEXTURE, x + 79, y + 17, 0, 166, 90, 54);
+            int cols  = this.menu.getChestColumns();
+            int gridW = cols * 18;   // 3 cols → 54px, 5 cols → 90px
+            int gridH = 54;          // siempre 3 filas
+            graphics.blit(GUI_TEXTURE, x + 79, y + 17, 0, 166, gridW, gridH);
         }
 
         // ── Slots de equipo (silla, armadura, carpet) ────────────────────

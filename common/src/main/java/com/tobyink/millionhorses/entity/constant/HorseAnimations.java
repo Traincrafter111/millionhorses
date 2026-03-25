@@ -108,6 +108,10 @@ public class HorseAnimations {
     public void sleepLay()   { SLEEP_LAY_COMMAND.sendForEntity(animatedEntity); }
     public void sleepUnlay() { SLEEP_UNLAY_COMMAND.sendForEntity(animatedEntity); }
     public void baby()       { BABY_COMMAND.sendForEntity(animatedEntity); }
+    private static final AzCommand STOP_BABY_COMMAND = AzCommand.create(
+            "baby_controller", "animation.cyn_horse.idle_base", AzPlayBehaviors.PLAY_ONCE
+    );
     public void babyPose()   { BABY_POSE_COMMAND.sendForEntity(animatedEntity); }
     public void babyBorn()   { BABYBORN_COMMAND.sendForEntity(animatedEntity); }
+    public void stopBaby()   { STOP_BABY_COMMAND.sendForEntity(animatedEntity); }
 }

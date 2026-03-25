@@ -1,9 +1,7 @@
 package com.tobyink.millionhorses.forge.client;
 
 import com.tobyink.millionhorses.MillionHorsesMod;
-import com.tobyink.millionhorses.entity.client.renderer.AlicornRenderer;
-import com.tobyink.millionhorses.entity.client.renderer.CynHorseRenderer;
-import com.tobyink.millionhorses.entity.client.renderer.PegasusRenderer;
+import com.tobyink.millionhorses.entity.client.renderer.*;
 import com.tobyink.millionhorses.registry.EntityRegistry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -23,6 +21,8 @@ public class MillionHorsesModForgeClient {
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.PEGASUS.get(), PegasusRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ALICORN.get(), AlicornRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.UNICORN.get(), UnicornRenderer::new);
         event.registerEntityRenderer(EntityRegistry.CYN_HORSE.get(), CynHorseRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.CYN_DONKEY.get(), CynDonkeyRenderer::new);
     }
 }

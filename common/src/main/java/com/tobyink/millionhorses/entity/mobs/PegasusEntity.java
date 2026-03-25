@@ -1,6 +1,8 @@
 package com.tobyink.millionhorses.entity.mobs;
 
 import com.tobyink.millionhorses.entity.variant.PegasusVariant;
+import com.tobyink.millionhorses.entity.mobs.AlicornEntity;
+import com.tobyink.millionhorses.entity.mobs.UnicornEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -87,20 +90,37 @@ public class PegasusEntity extends AbstractMillionHorseEntity {
         return createBaseMillionHorseAttributes();
     }
 
+    // Pegasus: mismos rangos que vanilla (abstract defaults)
+    // No override — hereda healthForGroup/speedForGroup/jumpForGroup de la abstract
+
     // =========================================================================
     // Breeding — pegasus x pegasus -> pegasus
     // =========================================================================
 
     @Override
     public boolean canMate(Animal other) {
-        if (!(other instanceof PegasusEntity partner)) return false;
-        return this.isTamed() && partner.isTamed()
-                && this.isInLove() && partner.isInLove();
+        if (other instanceof PegasusEntity partner)
+            return this.isTamed() && partner.isTamed()
+                    && this.isInLove() && partner.isInLove();
+        if (other instanceof UnicornEntity unicorn)
+            return this.isTamed() && unicorn.isTamed()
+                    && this.isInLove() && unicorn.isInLove();
+        return false;
     }
 
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mate) {
+        // Pegasus × Unicorn → Alicorn
+        if (mate instanceof UnicornEntity unicorn) {
+            AlicornEntity foal = com.tobyink.millionhorses.registry.EntityRegistry.ALICORN.get().create(level);
+            if (foal == null) return null;
+            foal.randomizeAttributesFromParents(this.random, this, unicorn);
+            foal.variantSetByNbt = true;
+            return foal;
+        }
+
+        // Pegasus × Pegasus → Pegasus
         if (!(mate instanceof PegasusEntity other)) return null;
 
         @SuppressWarnings("unchecked")

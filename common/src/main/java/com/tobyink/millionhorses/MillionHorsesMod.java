@@ -11,6 +11,7 @@ import com.tobyink.millionhorses.entity.client.renderer.PegasusRenderer;
 import com.tobyink.millionhorses.entity.client.screen.mHorsesScreen;
 import com.tobyink.millionhorses.entity.mobs.PegasusEntity;
 import com.tobyink.millionhorses.entity.mobs.CynHorseEntity;
+import com.tobyink.millionhorses.entity.mobs.UnicornEntity;
 import dev.architectury.event.events.common.TickEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
@@ -32,6 +33,7 @@ public final class MillionHorsesMod {
         com.tobyink.millionhorses.registry.MenuRegistry.init();
         registerPegasusSpawner();
         registerCynHorseSpawner();
+        registerUnicornSpawner();
         VanillaHorseSpawnHandler.register();
     }
 
@@ -133,6 +135,61 @@ public final class MillionHorsesMod {
                         level.addFreshEntity(horse);
                     }
                     break; // un grupo por jugador por intervalo
+                }
+            });
+        });
+    }
+
+    // Unicorn: spawnea en cherry_grove y flower_forest a cualquier altitud,
+    // o a Y>=196 en cualquier bioma. Luz >=7, máx 2 cerca del jugador.
+    private static void registerUnicornSpawner() {
+        TickEvent.SERVER_LEVEL_POST.register(level -> {
+            if (level.getGameTime() % SPAWN_INTERVAL != 0) return;
+
+            level.players().forEach(player -> {
+                long nearby = level.getEntitiesOfClass(UnicornEntity.class,
+                        player.getBoundingBox().inflate(128)).size();
+                if (nearby >= 2) return;
+
+                BlockPos playerPos = player.blockPosition();
+                int range = 64;
+
+                for (int attempts = 0; attempts < 12; attempts++) {
+                    int dx = level.random.nextInt(range * 2) - range;
+                    int dz = level.random.nextInt(range * 2) - range;
+                    int worldX = playerPos.getX() + dx;
+                    int worldZ = playerPos.getZ() + dz;
+
+                    int worldY = level.getHeight(
+                            net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                            worldX, worldZ);
+                    BlockPos ground   = new BlockPos(worldX, worldY - 1, worldZ);
+                    BlockPos spawnPos = ground.above();
+
+                    if (!level.getBlockState(spawnPos).isAir()) continue;
+                    if (level.getBrightness(LightLayer.SKY, spawnPos) < 7
+                            && level.getBrightness(LightLayer.BLOCK, spawnPos) < 7) continue;
+
+                    net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biome =
+                            level.getBiome(spawnPos);
+
+                    // Condición 1: cherry_grove o flower_forest a cualquier altitud
+                    boolean specialBiome = biome.is(Biomes.FLOWER_FOREST)
+                            || biome.is(Biomes.CHERRY_GROVE);
+
+                    // Condición 2: Y >= 196 en cualquier bioma (suelo sólido)
+                    boolean highAltitude = spawnPos.getY() >= 196;
+
+                    if (!specialBiome && !highAltitude) continue;
+
+                    UnicornEntity unicorn = EntityRegistry.UNICORN.get().create(level);
+                    if (unicorn == null) continue;
+                    unicorn.moveTo(worldX + 0.5, worldY, worldZ + 0.5,
+                            level.random.nextFloat() * 360, 0);
+                    unicorn.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos),
+                            MobSpawnType.NATURAL, null, null);
+                    level.addFreshEntity(unicorn);
+                    break;
                 }
             });
         });
